@@ -11,6 +11,17 @@
 |
 */
 
+use Carbon\Carbon;
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index');
+
+Route::get('/', function() {
+	return view('map');
+});
+
+Route::get('/events', function() {
+	$events = \App\Event::get();
+	return response()->json($events->load(['location']));
+});
