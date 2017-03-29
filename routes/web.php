@@ -19,31 +19,34 @@ Route::get('/', function() {
 });
 
 // Returns events in JSON format
-Route::get('/events', function() {
-	$events = \App\Event::get();
-	return response()->json($events->load(['location']));
-});
+Route::get('/events', "EventController@index");
 
 // Protected Admin routes
 Route::group(['middleware' => ['auth','verfied']], function() {
 	// Returns home view
 	Route::get('/home', 'HomeController@index');
 
+	/*
+	 * Account Routes
+	 */
 	// Returns account view
 	Route::get('/account', "AccountController@index");
-
 	// Updates password
 	Route::post('/account/psswd', "AccountController@updatePassword");
 
+	/*
+	 * User Routes
+	 */
 	// Returns users view with all users
 	Route::get('/users', "UserController@index");
-
 	// Updates the specified user's verified field
 	Route::patch('/users/{user}', "UserController@updatePermissions");
-
 	// Removes the specified user from the system
 	Route::delete('/users/{user}', "UserController@delete");
 
+	/*
+	 * Simply returns the admin event creator view
+	 */
 	Route::get('/map', function() {
 		return view('create');
 	});
@@ -51,8 +54,12 @@ Route::group(['middleware' => ['auth','verfied']], function() {
 	/*
 	 * Event routes
 	 */
+	// Stores a new event
 	Route::post("/event", "EventController@store");
+	// Updates an event's location
 	Route::patch("/event/{event}/location", "EventController@updateLocation");
-	Route::patch("/event/{event}", "EventLocation@updateEvent");
+	// Updates an event's information
+	Route::patch("/event/{event}", "EventController@updateEvent");
+	// Deletes an event from the system
 	Route::delete("/event/{event}", "EventController@delete");
 });

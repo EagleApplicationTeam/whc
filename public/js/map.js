@@ -39,14 +39,19 @@ function addMarkers(events, map) {
 			map: map
 		});
 
-		// Create the data window
-		var infoWindow = new google.maps.InfoWindow({
-			content: $("#form").html()
-		});
+		marker.name = events[i].name
 
 		// Attach a event listener to the marker so that the info window opens when clicked
 		google.maps.event.addListener(marker, 'click', function() {
-        	infoWindow.open(map, marker);
+			var name = this.name;
+
+			// Create the data window
+			var infoWindow = new google.maps.InfoWindow({
+				content: name
+			});
+
+			// Open the info window
+        	infoWindow.open(map, this);
       	});
 	}
 }
