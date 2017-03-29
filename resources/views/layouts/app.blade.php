@@ -53,12 +53,15 @@
                             <li><a href="{{ route('login') }}">Login</a></li>
                             <li><a href="{{ route('register') }}">Register</a></li>
                         @else
+                            <li><a href="/map">Map</a></li>
+                            <li><a href="/users">Users</a></li>
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                                     {{ Auth::user()->name }} <span class="caret"></span>
                                 </a>
 
                                 <ul class="dropdown-menu" role="menu">
+                                    <li><a href="/account">Account</a></li>
                                     <li>
                                         <a href="{{ route('logout') }}"
                                             onclick="event.preventDefault();
@@ -78,10 +81,31 @@
             </div>
         </nav>
 
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 col-md-offset-2">
+                    @if(Session::has('success'))
+                        <div class="alert alert-success" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <strong><span class="glyphicon glyphicon-ok-circle"></span> &nbsp;Success!</strong> {{ session('success') }}
+                        </div>
+                    @endif
+
+                    @if(Session::has('error'))
+                        <div class="alert alert-danger" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <strong><span class="glyphicon glyphicon-exclamation-sign"></span> &nbsp;Whooops!</strong> {{ session('error') }}
+                        </div>
+                    @endif
+                </div>
+            </div>
+        </div>
+        
         @yield('content')
     </div>
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
+    @stack('scripts')
 </body>
 </html>

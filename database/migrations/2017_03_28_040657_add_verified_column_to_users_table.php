@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateLocationsTable extends Migration
+class AddVerifiedColumnToUsersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,8 @@ class CreateLocationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('locations', function (Blueprint $table) {
-            $table->increments('id');
-            $table->float('lat', 20, 16);
-            $table->float('lng', 20, 16);
-            $table->timestamps();
+        Schema::table('users', function(Blueprint $table) {
+            $table->boolean('verified')->default(false);
         });
     }
 
@@ -28,6 +25,6 @@ class CreateLocationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('locations');
+        //
     }
 }
