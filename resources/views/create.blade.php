@@ -7,16 +7,16 @@
 		<div id="form">
 			<form>
 				<div class="form-group">
-					<label for="exampleInputEmail1">Name</label>
+					<label for="name">Name</label>
 					<input type="text" class="form-control" id="name" placeholder="something">
 				</div>
 				<div class="form-group">
-					<label for="exampleInputPassword1">Start Date</label>
-					<input type="date" class="form-control" id="exampleInputPassword1">
+					<label for="start">Start Date</label>
+					<input type="date" class="form-control" id="start">
 				</div>
 				<div class="form-group">
-					<label for="exampleInputPassword1">End Date</label>
-					<input type="date" class="form-control" id="exampleInputPassword1">
+					<label for="end">End Date</label>
+					<input type="date" class="form-control" id="end">
 				</div>
 				<div class="checkbox">
 					<label>
@@ -31,7 +31,6 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-md-8 col-md-offset-2" id="messageContainer">
-				
 			</div>
 		</div>
 		<div class="row">
@@ -42,7 +41,7 @@
 							<button class="btn btn-primary btn-block" id="addEvent"><span class="glyphicon glyphicon-plus"></span> Add Event</button>
 						</div>
 						<div class="col-md-10">
-							<div id="map" style="min-height: 550px; min-width: 100%;"></div>
+							<div id="map" style="min-height: 90vh; min-width: 100%;"></div>
 						</div>
 					</div>
 				</div>
@@ -110,26 +109,28 @@
 			marker.id = events[i].id;
 			marker.name = events[i].name;
 
+			// Create info window structure
+			var form = $("#form").clone();
+
+			// Setup the form ids and actions
+			form.find("form").attr("data-id",marker.id);
+			form.find("#save").attr("onclick", "saveInfo("+marker.id+")");
+			form.find("#delete").attr("onclick", "deleteEvent("+marker.id+")");
+
+			// Set input values
+			form.find("#name").attr("value",marker.name);
+
+			// Create the data window
+			var infoWindow = new google.maps.InfoWindow({
+				content: form.html()
+			});
+
+			marker.infoWindow = infoWindow;
+
 			// Attach a event listener to the marker so that the info window opens when clicked
 			google.maps.event.addListener(marker, 'click', function() {
-				// Create info window structure
-				var form = $("#form").clone();
-
-				// Setup the form ids and actions
-				form.find("form").attr("data-id",this.id);
-				form.find("#save").attr("onclick", "saveInfo("+this.id+")");
-				form.find("#delete").attr("onclick", "deleteEvent("+this.id+")");
-
-				// Set input values
-				form.find("#name").attr("value",this.name);
-
-				// Create the data window
-				var infoWindow = new google.maps.InfoWindow({
-					content: form.html()
-				});
-
 				// Open info window
-	        	infoWindow.open(map, this);
+	        	this.infoWindow.open(map, this);
 	      	});
 
 			// Call the position update method when drag ends
@@ -179,26 +180,28 @@
 		marker.id = response.data.id
 		marker.name = response.data.name
 
+		// Create info window structure
+		var form = $("#form").clone();
+
+		// Setup the form ids and actions
+		form.find("form").attr("data-id",marker.id);
+		form.find("#save").attr("onclick", "saveInfo("+marker.id+")");
+		form.find("#delete").attr("onclick", "deleteEvent("+marker.id+")");
+
+		// Set input values
+		form.find("#name").attr("value",marker.name);
+
+		// Create the data window
+		var infoWindow = new google.maps.InfoWindow({
+			content: form.html()
+		});
+
+		marker.infoWindow = infoWindow;
+
 		// Add click event
 		google.maps.event.addListener(marker, 'click', function() {
-			// Create info window structure
-			var form = $("#form").clone();
-
-			// Setup the form ids and actions
-			form.find("form").attr("data-id",this.id);
-			form.find("#save").attr("onclick", "saveInfo("+this.id+")");
-			form.find("#delete").attr("onclick", "deleteEvent("+this.id+")");
-
-			// Set input values
-			form.find("#name").attr("value",this.name);
-
-			// Create the data window
-			var infoWindow = new google.maps.InfoWindow({
-				content: form.html()
-			});
-
 			// Open info window
-        	infoWindow.open(map, this);  	
+        	this.infoWindow.open(map, this);  	
       	});
 
 		// Add drag end event
@@ -235,60 +238,66 @@
 		// Get DOM of marker info window
 		var form = $("form[data-id='" + id + "']");
 
-		// Setup save button loading state
-		var saveButton = form.find("#save");
-		saveButton.text("Saving...").toggleClass("disabled");
+		var name = form.find("#name").val();
 
-		// Attempt request to update the event's info
-		axios.patch("/event/"+id, {
-			name: form.find("#name").val()
-		}).then((response) => {
-			// Toggle loaded state and reset after 2 seconds 
-			saveButton.text("Saved!");
-			setTimeout(function() {
+		if (name != null || name != "") {
+			// Setup save button loading state
+			var saveButton = form.find("#save");
+			saveButton.text("Saving...").toggleClass("disabled");
+
+			// Attempt request to update the event's info
+			axios.patch("/event/"+id, {
+				name: name
+			}).then((response) => {
+				// Toggle loaded state and reset after 2 seconds 
+				saveButton.text("Saved!");
+				setTimeout(function() {
+					saveButton.toggleClass("disabled").text("Save");
+				}, 2000);
+			}).catch((error) => {
+				// Show error message
+				showErrorMessage("There was a problem updating the event information.");
+
+				// Return button to normal state
 				saveButton.toggleClass("disabled").text("Save");
-			}, 2000);
-		}).catch((error) => {
-			// Show error message
-			showErrorMessage("There was a problem updating the event information.");
-
-			// Return button to normal state
-			saveButton.toggleClass("disabled").text("Save");
-		});
+			});
+		}
 	}
 
 	/*
 	 * Delete an event
 	 */
 	function deleteEvent(id) {
-		// Get the event form DOM
-		var form = $("form[data-id='" + id + "']");
+		if (id != null) {
+			// Get the event form DOM
+			var form = $("form[data-id='" + id + "']");
 
-		// Toggle loading state
-		var deleteButton = form.find("#delete");
-		deleteButton.text("Deleting...").toggleClass("disabled");
+			// Toggle loading state
+			var deleteButton = form.find("#delete");
+			deleteButton.text("Deleting...").toggleClass("disabled");
 
-		// Attempt request to delete event
-		axios.delete("/event/"+id).then((response) => {
-			deleteButton.text("Deleted!")
+			// Attempt request to delete event
+			axios.delete("/event/"+id).then((response) => {
+				deleteButton.text("Deleted!")
 
-			// After 2 seconds remove the marker
-			setTimeout(function() {
-				// Loop through the markers array
-				for (var i = markers.length - 1; i >= 0; i--) {
-					// Marker id matches specified id, remove the marker
-					if (markers[i].id === id) {
-						markers[i].setMap(null);
+				// After 2 seconds remove the marker
+				setTimeout(function() {
+					// Loop through the markers array
+					for (var i = markers.length - 1; i >= 0; i--) {
+						// Marker id matches specified id, remove the marker
+						if (markers[i].id === id) {
+							markers[i].setMap(null);
+						}
 					}
-				}
-			}, 2000);
-		}).catch((error) => {
-			// Return to normal state
-			deleteButton.text("Delete").toggleClass("disabled");
+				}, 2000);
+			}).catch((error) => {
+				// Return to normal state
+				deleteButton.text("Delete").toggleClass("disabled");
 
-			// Show error message
-			showErrorMessage("There was a problem deleting the event.");
-		});
+				// Show error message
+				showErrorMessage("There was a problem deleting the event.");
+			});
+		}
 	}
 
 	/*
@@ -296,10 +305,11 @@
 	 */
 	function showErrorMessage(message) {
 		// Setup html elements with message
-		var html = '<div class="alert alert-danger" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><span class="glyphicon glyphicon-exclamation-sign"></span><strong> Whoops!</strong><span> ' + message + '</span></div>'
-		// Present the alert
-		$("#messageContainer").html(html);
-		
+		if (message != null || message != '') {
+			var html = '<div class="alert alert-danger" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><span class="glyphicon glyphicon-exclamation-sign"></span><strong> Whoops!</strong><span> ' + message + '</span></div>'
+			// Present the alert
+			$("#messageContainer").html(html);
+		}
 	}
 </script>
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBope1OFljyrx9BHNeaC9YJ3Oxx76i6XFY&callback=initMap"></script>

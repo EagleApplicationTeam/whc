@@ -1,3 +1,4 @@
+<!-- Copyright Eagle Application Team 2017 -->
 <!DOCTYPE html>
 <html lang="{{ config('app.locale') }}">
 <head>
