@@ -58,9 +58,11 @@ function addMarkers(events, map) {
 		marker.name = events[i].name
 		marker.id = events[i].id
 
+		// marker.name
+
 		// Create the data window
 		var infoWindow = new google.maps.InfoWindow({
-			content: marker.name
+			content: "<h3>" + marker.name + "</h3><div id='directions" + marker.id + "' class='btn btn-primary' onclick='redirectToDirections(" + marker.id + ")'>Directions <span class='glyphicon glyphicon-log-out'></span></div>"
 		});
 
 		marker.infoWindow = infoWindow;
@@ -117,6 +119,39 @@ function searchItemSelected(id,map) {
 
      		// Open marker info window
      		marker.infoWindow.open(map, marker);
+
+     		break;
 		}
+	}
+}
+
+/*
+ * Function for redirecting the user to google maps with the desired directions
+ */
+function redirectToDirections(id) {
+	// Toggle Loading state
+	$("#directions"+id).text("Please wait...").toggleClass("disabled");
+
+	// Find marker
+	var des;
+	for (var i = markers.length - 1; i >= 0; i--) {
+		if (markers[i].id === id) {
+			des = markers[i].getPosition()
+			break;
+		}
+	}
+
+	// Try to get location
+	if (navigator.geolocation) {
+		navigator.geolocation.getCurrentPosition(function(data) {
+			if (data.coords) {
+				// Build URL with coordinates from origin and destination
+				var url = "https://www.google.com/maps?saddr=" + data.coords.latitude + "," + data.coords.longitude + "&daddr=" + des.lat() + "," + des.lng();
+				$("#directions"+id).html("Directions <span class='glyphicon glyphicon-log-out'></span>").toggleClass("disabled");
+				window.location = url;
+			}
+		});
+	} else {
+		alert("Location not supported");
 	}
 }

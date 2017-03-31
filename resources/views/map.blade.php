@@ -2,56 +2,60 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 	<title>WHC Map</title>
 	<!-- Styles so that the map takes up the entire window -->
 	<style>
         html {
-            min-height: 100%;
-            min-width: 100%;
+            min-height: 100vh;
+            min-width: 100vw;
         }
 
         body {
-            min-height: 100%;
-            min-width: 100%;
+            min-height: 100vh;
+            min-width: 100vw;
             padding: 0;
             margin: 0;
         }
 
         #map {
             min-height: 100vh;
-            min-width: 1000px;
+            min-width: 100vw;
         }
 
         .searchBarContainer {
-            width: 40vw; 
-            height: 50px; 
+            width: 50vw; 
+            height: 35px; 
             position: absolute; 
-            left: 50%;
-            -webkit-transform: translateX(-50%);
-            transform: translateX(-50%);
+            right: 5%;
+            /*-webkit-transform: translateX(-50%);
+            transform: translateX(-50%);*/
             /*top: 20px; 
             left: 30%; */
             background-color: #fff; 
             z-index: 5; 
             border-radius: 5px; 
-            padding: 10px;
-            margin-top: 20px;
+            padding: 5px;
+            margin-top: 12px;
         }
 
         .searchBarInput {
-            min-width: 100%; 
-            min-height: 100%; 
+            max-width: 50vw; 
+            max-height: 55px; 
             border: none; 
             outline: none;
+            margin-bottom: 7px;
         }
 
         .searchItem {
-            min-width: 500px; 
+            min-width: 50vw; 
             min-height: 20px; 
             background-color: #fff; 
-            padding: 10px; 
-            margin-left: -10px;
+            padding: 10px;
+            -webkit-transform: translateX(-5px);
+            transform: translateX(-5px);
         }
 
         .searchItem:hover {
@@ -74,7 +78,7 @@
         <div id="app">
             <!-- Search Bar -->
             <div class="searchBarContainer">
-                <input id="search" type="text" class="searchBarInput" placeholder="Search for events..." autocomplete="off">
+                <input id="search" type="text" class="searchBarInput" placeholder="Search" autocomplete="off">
                 <div class="results">
                     
                 </div>
