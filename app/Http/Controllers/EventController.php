@@ -56,12 +56,14 @@ class EventController extends Controller
      * Update an event's data
      */
     public function updateEvent(Request $request, Event $event) {
-        $this->validate($request, [
-            'name' => 'max:50',
-            'body' => 'max:255',
-            'address' => 'max:50',
-            'link' => 'active_url'
-        ]);
+        // Validate request
+        // $this->validate($request, [
+        //     'name' => 'max:50',
+        //     'body' => 'max:255',
+        //     'address' => 'max:50',
+        //     'link' => 'active_url'
+        // ]);
+
         // Check if event exists
     	if (!$event) {
     		return response(null, 404);
