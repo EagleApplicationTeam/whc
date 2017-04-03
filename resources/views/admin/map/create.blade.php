@@ -55,6 +55,6 @@
 @endsection
 
 @push('scripts')
-<script src="/js/adminMap.js"></script>
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBope1OFljyrx9BHNeaC9YJ3Oxx76i6XFY&callback=initMap"></script>
+	<script src="/js/adminMap.js"></script>
+	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBope1OFljyrx9BHNeaC9YJ3Oxx76i6XFY&callback=initMap"></script>
 @endpush
