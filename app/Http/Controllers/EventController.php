@@ -19,8 +19,16 @@ class EventController extends Controller
     /*
      * Returns all events
      */
-    public function index() {
+    public function clientIndex() {
         // Get all events
+        $events = \App\Event::where('live', true)->get();
+
+        // Return them in the response
+        return response()->json($events->load(['location']));
+    }
+
+    public function adminIndex() {
+         // Get all events
         $events = \App\Event::get();
 
         // Return them in the response
@@ -74,6 +82,7 @@ class EventController extends Controller
         $event->body = $request->body;
         $event->address = $request->address;
         $event->link = $request->link;
+        $event->live = $request->live;
 
         // Save out the event
     	$event->save();

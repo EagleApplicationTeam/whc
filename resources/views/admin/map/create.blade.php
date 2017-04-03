@@ -24,7 +24,7 @@
 				</div>
 				<div class="checkbox">
 					<label>
-						<input type="checkbox"> Live
+						<input type="checkbox" id="live" checked> Live
 					</label>
 				</div>
 				<div id="save" class="saveButton btn btn-success">Save</div>

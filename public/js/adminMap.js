@@ -29,7 +29,7 @@ function initMap() {
  */
 function getEvents(map) {
 	// AJAX request to server
-	axios.get("/events").then((response) => {
+	axios.get("/map/events").then((response) => {
 		// Add the markers to the map
 		addMarkers(response.data, map);
 	}).catch((error) => {
@@ -57,6 +57,7 @@ function addMarkers(events, map) {
 		marker.body = events[i].body;
 		marker.address = events[i].address;
 		marker.link = events[i].link
+		marker.live = events[i].live
 
 		// Create info window structure
 		var form = $("#form").clone();
@@ -71,6 +72,10 @@ function addMarkers(events, map) {
 		form.find("#body").text(marker.body);
 		form.find("#address").attr("value", marker.address);
 		form.find("#link").attr("value", marker.link);
+
+		if (marker.live !== 1) {
+			form.find("#live").removeAttr("checked");
+		}
 
 		form.find("#directions").attr("id", "directions"+marker.id);
 		form.find("#directions"+marker.id).attr("onclick", "redirectToDirections(" + marker.id + ")");
@@ -204,6 +209,12 @@ function saveInfo(id) {
 	var address = form.find("#address").val();
 	var link = form.find("#link").val();
 
+	var checked = false
+
+	if (form.find("#live").is(":checked")) {
+		checked = true;
+	}
+
 	if (name != "" || body != "" || address != "" || link != "") {
 		// Setup save button loading state
 		var saveButton = form.find("#save");
@@ -214,7 +225,8 @@ function saveInfo(id) {
 			name: name,
 			body: body,
 			address: address,
-			link: link
+			link: link,
+			live: checked
 		}).then((response) => {
 			// Toggle loaded state and reset after 2 seconds 
 			saveButton.text("Saved!");

@@ -22,7 +22,7 @@ Route::get('/', function() {
 });
 
 // Returns events in JSON format
-Route::get('/events', "EventController@index");
+Route::get('/events', "EventController@clientIndex");
 
 // Protected Admin routes
 Route::group(['middleware' => ['auth','verfied']], function() {
@@ -48,6 +48,7 @@ Route::group(['middleware' => ['auth','verfied']], function() {
 	 * Simply returns the admin event creator view
 	 */
 	Route::get('/map', "EventController@get");
+	Route::get('/map/events', "EventController@adminIndex");
 
 	/*
 	 * Event routes
