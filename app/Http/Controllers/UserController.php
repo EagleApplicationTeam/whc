@@ -12,7 +12,7 @@ class UserController extends Controller
 	 */
 	public function index() {
 		$users = User::get();
-		return view('users')->with('users', $users);
+		return view('admin.users.users')->with('users', $users);
 	}
 
 	/*

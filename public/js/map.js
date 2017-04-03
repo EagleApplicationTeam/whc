@@ -55,14 +55,26 @@ function addMarkers(events, map) {
 		});
 
 		// Set marker properties
-		marker.name = events[i].name
 		marker.id = events[i].id
+		marker.name = events[i].name
+		marker.body = events[i].body
+		marker.address = events[i].address
+		marker.link = events[i].link
 
-		// marker.name
+		// Build the form out
+		var form = $("#infoWindow").clone();
+
+		form.find("#name").text(marker.name);
+		form.find("#body").text(marker.body);
+		form.find("#address").text(marker.address);
+		form.find("#link").attr("href", marker.link);
+
+		form.find(".directions").attr("id", "directions"+marker.id);
+		form.find("#directions"+marker.id).attr("onclick", "redirectToDirections(" + marker.id + ")");
 
 		// Create the data window
 		var infoWindow = new google.maps.InfoWindow({
-			content: "<h3>" + marker.name + "</h3><div id='directions" + marker.id + "' class='btn btn-primary' onclick='redirectToDirections(" + marker.id + ")'>Directions <span class='glyphicon glyphicon-log-out'></span></div>"
+			content: form.html()
 		});
 
 		marker.infoWindow = infoWindow;
@@ -141,6 +153,8 @@ function redirectToDirections(id) {
 		}
 	}
 
+	console.log(des);
+
 	// Try to get location
 	if (navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(function(data) {
@@ -150,6 +164,9 @@ function redirectToDirections(id) {
 				$("#directions"+id).html("Directions <span class='glyphicon glyphicon-log-out'></span>").toggleClass("disabled");
 				window.location = url;
 			}
+		// Show error message
+		}, function() {
+			alert("An error occured while trying to determine location.");
 		});
 	} else {
 		alert("Location not supported");

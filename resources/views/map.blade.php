@@ -74,6 +74,15 @@
     </script>
 </head>
 	<body>
+        <div class="hidden">
+            <div id="infoWindow">
+                <h3 id="name"></h3>
+                <p id="body"></p>
+                <h4 id="address"></h4>
+                <h4><a id="link" href="#">Website</a></h4>
+                <div class='btn btn-primary directions' onclick="redirectToDirections()">Directions <span class='glyphicon glyphicon-log-out'></span></div>
+            </div>
+        </div>
 		<!-- Map Container -->
         <div id="app">
             <!-- Search Bar -->

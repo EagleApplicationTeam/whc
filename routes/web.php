@@ -11,9 +11,12 @@
 |
 */
 
+/*
+ * Authentication routes
+ */
 Auth::routes();
 
-// Returns map view
+// Returns client side map view
 Route::get('/', function() {
 	return view('map');
 });
@@ -23,9 +26,6 @@ Route::get('/events', "EventController@index");
 
 // Protected Admin routes
 Route::group(['middleware' => ['auth','verfied']], function() {
-	// Returns home view
-	Route::get('/home', 'HomeController@index');
-
 	/*
 	 * Account Routes
 	 */
@@ -47,9 +47,7 @@ Route::group(['middleware' => ['auth','verfied']], function() {
 	/*
 	 * Simply returns the admin event creator view
 	 */
-	Route::get('/map', function() {
-		return view('create');
-	});
+	Route::get('/map', "EventController@get");
 
 	/*
 	 * Event routes

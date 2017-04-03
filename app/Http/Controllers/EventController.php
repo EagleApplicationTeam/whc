@@ -10,6 +10,13 @@ use Illuminate\Http\Request;
 class EventController extends Controller
 {
     /*
+     * Returns the map creation view
+     */
+    public function get() {
+        return view('admin.map.create');
+    }
+
+    /*
      * Returns all events
      */
     public function index() {
@@ -27,10 +34,9 @@ class EventController extends Controller
     	// Create a new event
     	$event = new Event;
     	$event->name = "New Event";
-    	$event->image_url = "Some url";
-    	$event->link = "Some link";
-    	$event->start_date = Carbon::now();
-    	$event->end_date = Carbon::now();
+    	$event->body = "A description of the event.";
+        $event->address = "1234 Something Street";
+    	$event->link = "www.something.com";
 
     	// Create a new location
     	$location = new Location;
@@ -57,6 +63,11 @@ class EventController extends Controller
 
         // Updat event information
     	$event->name = $request->name;
+        $event->body = $request->body;
+        $event->address = $request->address;
+        $event->link = $request->link;
+
+        // Save out the event
     	$event->save();
 
         // Return the event
