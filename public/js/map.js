@@ -167,8 +167,12 @@ function redirectToDirections(id) {
 		// Show error message
 		}, function() {
 			alert("An error occured while trying to determine location.");
+			$("#directions"+id).html("Directions <span class='glyphicon glyphicon-log-out'></span>").toggleClass("disabled");
+				window.location = url;
 		});
 	} else {
 		alert("Location not supported");
+		$("#directions"+id).html("Directions <span class='glyphicon glyphicon-log-out'></span>").toggleClass("disabled");
+				window.location = url;
 	}
 }
