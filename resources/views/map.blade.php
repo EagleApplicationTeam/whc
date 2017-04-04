@@ -39,10 +39,11 @@
             border-radius: 5px; 
             padding: 5px;
             margin-top: 12px;
+            overflow: hidden;
         }
 
         .searchBarInput {
-            max-width: 50vw; 
+            min-width: 100%; 
             max-height: 55px; 
             border: none; 
             outline: none;

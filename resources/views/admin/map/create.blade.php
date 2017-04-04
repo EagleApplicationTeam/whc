@@ -21,6 +21,7 @@
 				<div>
 					<label for="link">Link</label>
 					<input type="text" name="link" id="link" class="form-control">
+					<p class="help-block">Make sure this is a http:// or https:// in the link.</p>
 				</div>
 				<div class="checkbox">
 					<label>
