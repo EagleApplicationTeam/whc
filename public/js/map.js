@@ -153,8 +153,6 @@ function redirectToDirections(id) {
 		}
 	}
 
-	console.log(des);
-
 	// Try to get location
 	if (navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(function(data) {
@@ -166,12 +164,12 @@ function redirectToDirections(id) {
 			}
 		// Show error message
 		}, function() {
-			alert("An error occured while trying to determine location.");
+			alert("Geolocation is disabled. Try enabling location services for the browser and try again.");
 			$("#directions"+id).html("Directions <span class='glyphicon glyphicon-log-out'></span>").toggleClass("disabled");
 				window.location = url;
 		});
 	} else {
-		alert("Location not supported");
+		alert("Geolocation is not supported by this browser.");
 		$("#directions"+id).html("Directions <span class='glyphicon glyphicon-log-out'></span>").toggleClass("disabled");
 				window.location = url;
 	}
