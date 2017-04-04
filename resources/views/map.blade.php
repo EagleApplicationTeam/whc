@@ -38,16 +38,17 @@
             z-index: 5; 
             border-radius: 5px; 
             padding: 5px;
-            margin-top: 12px;
-            overflow: hidden;
+            margin-top: 11px;
         }
 
         .searchBarInput {
-            min-width: 100%; 
+            min-width: 100%;
+            max-width: 45vw; 
             max-height: 55px; 
             border: none; 
             outline: none;
-            margin-bottom: 7px;
+            margin-bottom: 2px;
+            overflow-x: hidden;
         }
 
         .searchItem {
