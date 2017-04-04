@@ -45,6 +45,7 @@ class EventController extends Controller
     	$event->body = "A description of the event.";
         $event->address = "1234 Something Street";
     	$event->link = "www.something.com";
+        $event->live = true;
 
     	// Create a new location
     	$location = new Location;

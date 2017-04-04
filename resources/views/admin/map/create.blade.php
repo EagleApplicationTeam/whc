@@ -12,7 +12,7 @@
 				</div>
 				<div class="form-group">
 					<label for="body">Body</label>
-					<textarea name="body" id="body" cols="30" rows="5" class="form-control"></textarea>
+					<textarea name="body" id="body" cols="30" rows="4" class="form-control"></textarea>
 				</div>
 				<div class="form-group">
 					<label for="address">Address</label>
@@ -21,12 +21,13 @@
 				<div>
 					<label for="link">Link</label>
 					<input type="text" name="link" id="link" class="form-control">
-					<p class="help-block">Make sure this is a http:// or https:// in the link.</p>
+					<p class="help-block">Make sure there is a http:// or https:// in the link.</p>
 				</div>
 				<div class="checkbox">
 					<label>
 						<input type="checkbox" id="live" checked> Live
 					</label>
+					<p class="help-block">Check this to make the event visible to the public.</p>
 				</div>
 				<div id="save" class="saveButton btn btn-success">Save</div>
 				<div id="delete" class="btn btn-danger pull-right" data-toggle="modal" data-target="#myModal">Delete</div>
