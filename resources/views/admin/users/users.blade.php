@@ -21,7 +21,7 @@
 								<td>{{ $user->name }}</td>
 								<td>{{ $user->verified ? "Yes" : "No" }}</td>
 								<td>
-									@if($user->id != 1 && $user->id != Auth::user()->id)
+									@if($user->id != Auth::user()->id)
 
 									<form action="/users/{{$user->id}}" style="display: inline;" method="POST">
 										@if($user->verified)

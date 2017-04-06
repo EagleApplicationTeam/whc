@@ -200,6 +200,9 @@ function addEvent(map) {
 	});
 }
 
+/*
+ * Save event info
+ */
 function saveInfo(id) {
 	// Get DOM of marker info window
 	var form = $("form[data-id='" + id + "']");

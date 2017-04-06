@@ -166,11 +166,11 @@ function redirectToDirections(id) {
 		}, function() {
 			alert("Geolocation is disabled. Try enabling location services for the browser and try again.");
 			$("#directions"+id).html("Directions <span class='glyphicon glyphicon-log-out'></span>").toggleClass("disabled");
-				window.location = url;
+			window.location = url;
 		});
 	} else {
 		alert("Geolocation is not supported by this browser.");
 		$("#directions"+id).html("Directions <span class='glyphicon glyphicon-log-out'></span>").toggleClass("disabled");
-				window.location = url;
+		window.location = url;
 	}
 }

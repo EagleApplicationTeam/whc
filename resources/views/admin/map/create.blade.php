@@ -44,7 +44,7 @@
 				<div class="panel panel-default">
 					<div class="panel-body">
 						<div class="col-md-2" style="text-align: center;">
-							<button class="btn btn-primary btn-block" id="addEvent"><span class="glyphicon glyphicon-plus"></span> Add Event</button>
+							<button class="btn btn-primary btn-block" id="addEvent"><span class="glyphicon glyphicon-plus"></span> Add Marker</button>
 						</div>
 						<div class="col-md-10">
 							<div id="map" style="min-height: 90vh; min-width: 100%;"></div>

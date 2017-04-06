@@ -30,10 +30,6 @@
             height: 35px; 
             position: absolute; 
             right: 5%;
-            /*-webkit-transform: translateX(-50%);
-            transform: translateX(-50%);*/
-            /*top: 20px; 
-            left: 30%; */
             background-color: #fff; 
             z-index: 5; 
             border-radius: 5px; 
@@ -111,7 +107,6 @@
 
           ga('create', 'UA-96839075-1', 'auto');
           ga('send', 'pageview');
-
         </script>
 	</body>
 </html>
