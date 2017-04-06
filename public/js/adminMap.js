@@ -218,7 +218,7 @@ function saveInfo(id) {
 		checked = true;
 	}
 
-	if (name != "" || body != "" || address != "" || link != "") {
+	if (name != "") {
 		// Setup save button loading state
 		var saveButton = form.find("#save");
 		saveButton.text("Saving...").toggleClass("disabled");
