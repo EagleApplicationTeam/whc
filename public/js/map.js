@@ -27,12 +27,22 @@ function initMap() {
     });
 
     var searchMarkers = [];
+
+    // Find custom markers
+	for (var i = markers.length - 1; i >= 0; i--) {
+		var name = markers[i].name;
+		var lname = name.toLowerCase();
+		var query = places.toLowerCase();
+		// If event name contains query substring
+		if (lname.includes(query)) {
+			searchMarkers.push(markers[i]);
+		}
+	}
+
     // Listen for the event fired when the user selects a prediction and retrieve
     // more details for that place.
     searchBox.addListener('places_changed', function() {
       	var places = searchBox.getPlaces();
-
-      	console.log(places);
 
       	if (places.length == 0) {
         	return;
@@ -72,6 +82,8 @@ function initMap() {
 	        	content: marker.title
 	        });
 
+	        map.setZoom(3);
+
 	        infoWindow.open(map, marker);
 	        
 	        searchMarkers.push(marker);
@@ -83,17 +95,6 @@ function initMap() {
 	          	bounds.extend(place.geometry.location);
 	        }
       	});
-
-	    // Find custom markers
-		for (var i = markers.length - 1; i >= 0; i--) {
-			var name = markers[i].name;
-			var lname = name.toLowerCase();
-			var query = places.toLowerCase();
-			// If event name contains query substring
-			if (lname.includes(query)) {
-				searchMarkers.push(markers[i]);
-			}
-		}
 
       	map.fitBounds(bounds);
     });
