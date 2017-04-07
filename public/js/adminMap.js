@@ -96,7 +96,7 @@ function addMarker(map, event, position) {
 	if (marker.live !== 1) {
 		form.find("#live").removeAttr("checked");
 	}
-	
+
 	form.find("#directions").attr("id", "directions"+marker.id);
 	form.find("#directions"+marker.id).attr("onclick", "redirectToDirections(" + marker.id + ")");
 
@@ -282,14 +282,19 @@ function tryGeo(id) {
 					// Set position of marker
 					marker.setPosition(position);
 
-					// Reset infowindow
-					marker.infoWindow.close();
-					marker.infoWindow.open(map, marker);
+					// Reset all marker infowindows and reopen specified infowindow
+					for (var i = markers.length - 1; i >= 0; i--) {
+						markers[i].infoWindow.close()
+
+						if (markers[i].id === id) {
+							markers[i].infoWindow.open(map, marker);
+						}
+					}
 
 					// Send API request to update location
 					updatePosition(marker.id, position);
 				} else {
-					alert("Unable to locate address.");
+					showErrorMessage("Unable to locate address.");
 				}
 			})
 		}
