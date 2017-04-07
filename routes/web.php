@@ -24,6 +24,7 @@ Route::get('/', function() {
 // Returns events in JSON format
 Route::get('/events', "EventController@clientIndex");
 Route::get('/location/{event}', "EventController@getEvent");
+Route::get('/location', "EventController@getLocation");
 
 // Protected Admin routes
 Route::group(['middleware' => ['auth','verfied']], function() {

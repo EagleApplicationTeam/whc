@@ -164,7 +164,11 @@ function addMarkers(events, map) {
 
 	// If event is specified on page load
 	if(typeof goToEvent === "function") {
-		goToEvent(markers);
+		goToEvent(markers,map);
+	}
+
+	if(typeof goToLocation === "function") {
+		goToLocation(map);
 	}
 }
 

@@ -43,6 +43,17 @@ class EventController extends Controller
         return redirect('/')->with('event', $event);
     }
 
+    public function getLocation(Request $request) {
+        $data = [
+            'lat' => $request->lat,
+            'lng' => $request->lng
+        ];
+
+        // dd($data);
+
+        return redirect('/')->with(['location' => $data]);
+    }
+
 	/*
 	 * Create a new event
 	 */

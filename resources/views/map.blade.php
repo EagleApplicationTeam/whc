@@ -122,20 +122,53 @@
          @if(Session::has('event'))
             <!-- Script that will take map to route event -->
             <script>
-                function goToEvent(markersArray) {
+                // When an event object is passed to the view, go to it
+                function goToEvent(markersArray, map) {
+                    // Get the id of the event
                     var id = {{ session('event')->id }};
+                    // Loop through the markers and find right one
                     for (var i = markersArray.length - 1; i >= 0; i--) {
                         var marker = markersArray[i];
                         if (marker.id == id) {
-                            var map = marker.getMap();
+                            // Set the position of the map on the marker
                             map.setCenter(marker.getPosition());
+                            // Set the zoom of the map
                             map.setZoom(17);
 
+                            // Open the info window
                             marker.infoWindow.open(map, marker);
                         }
                     }
                 }
             </script>
+        @endif
+
+        @if(Session::has('location'))
+        <script>
+            function goToLocation(map) {
+                // Setup variables
+                var lat = {{ session('location')['lat'] }};
+                var lng = {{ session('location')['lng'] }};
+
+                // Make new marker
+                // var marker = new google.maps.Marker({
+                //     map: map,
+                //     position: {
+                //         lat: lat,
+                //         lng: lng
+                //     }
+                // });
+
+                // Set map center
+                map.setCenter({
+                    lat: lat,
+                    lng: lng
+                });
+
+                // Set map zoom
+                map.setZoom(16);
+            }
+        </script>
         @endif
 		<!-- Map logic script -->
 		<script src="/js/map.js"></script>
