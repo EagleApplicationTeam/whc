@@ -78,13 +78,8 @@ function addMarker(map, event, position) {
 	form.find("form").attr("data-id",marker.id);
 	form.find("#save").attr("onclick", "saveInfo("+marker.id+")");
 	form.find("#delete").attr("onclick", "deleteEvent("+marker.id+")");
-	form.find("#address").attr("onblur", "tryGeo("+marker.id+")");
+	// form.find("#address").attr("onblur", "tryGeo("+marker.id+")");
 	form.find("#address").attr("data-id", marker.id);
-	form.find("#address").on('keyup', function(e) {
-		if (e.keyCode == 13) {
-			console.log("some shit");
-		}
-	});
 
 	// Set input values
 	form.find("#name").attr("value",marker.name);
@@ -192,6 +187,7 @@ function saveInfo(id) {
 		}).then((response) => {
 			// Toggle loaded state and reset after 2 seconds 
 			saveButton.text("Saved!");
+			tryGeo(id);
 			setTimeout(function() {
 				saveButton.toggleClass("disabled").text("Save");
 			}, 2000);
