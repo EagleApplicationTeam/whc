@@ -27,7 +27,7 @@
 					<label>
 						<input type="checkbox" id="live" checked> Live
 					</label>
-					<p class="help-block">Check this to make the event visible to the public.</p>
+					<p class="help-block">Check this to make the location visible to the public.</p>
 				</div>
 				<div id="save" class="saveButton btn btn-success">Save</div>
 				<div id="delete" class="btn btn-danger pull-right" data-toggle="modal" data-target="#myModal">Delete</div>

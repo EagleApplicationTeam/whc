@@ -82,7 +82,7 @@ function initMap() {
 	        	content: marker.title
 	        });
 
-	        map.setZoom(3);
+	        // map.setZoom(3);
 
 	        infoWindow.open(map, marker);
 	        
@@ -160,6 +160,11 @@ function addMarkers(events, map) {
 
 		// Push marker onto markers array
       	markers.push(marker);
+	}
+
+	// If event is specified on page load
+	if(typeof goToEvent === "function") {
+		goToEvent(markers);
 	}
 }
 

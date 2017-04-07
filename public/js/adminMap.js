@@ -292,7 +292,7 @@ function tryGeo(id) {
 					}
 
 					// Send API request to update location
-					updatePosition(marker.id, position);
+					updatePosition(id, position);
 				} else {
 					showErrorMessage("Unable to locate address.");
 				}

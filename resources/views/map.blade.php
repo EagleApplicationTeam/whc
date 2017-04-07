@@ -119,6 +119,24 @@
         </div>
 		<!-- Helper packages and functions -->
 		<script src="/js/app.js"></script>
+         @if(Session::has('event'))
+            <!-- Script that will take map to route event -->
+            <script>
+                function goToEvent(markersArray) {
+                    var id = {{ session('event')->id }};
+                    for (var i = markersArray.length - 1; i >= 0; i--) {
+                        var marker = markersArray[i];
+                        if (marker.id == id) {
+                            var map = marker.getMap();
+                            map.setCenter(marker.getPosition());
+                            map.setZoom(17);
+
+                            marker.infoWindow.open(map, marker);
+                        }
+                    }
+                }
+            </script>
+        @endif
 		<!-- Map logic script -->
 		<script src="/js/map.js"></script>
 		<!-- Google Maps API script -->

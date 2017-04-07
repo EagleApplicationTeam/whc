@@ -23,6 +23,7 @@ Route::get('/', function() {
 
 // Returns events in JSON format
 Route::get('/events', "EventController@clientIndex");
+Route::get('/location/{event}', "EventController@getEvent");
 
 // Protected Admin routes
 Route::group(['middleware' => ['auth','verfied']], function() {
@@ -61,4 +62,10 @@ Route::group(['middleware' => ['auth','verfied']], function() {
 	Route::patch("/event/{event}", "EventController@updateEvent");
 	// Deletes an event from the system
 	Route::delete("/event/{event}", "EventController@delete");
+
+	/*
+	 Utility Routs
+	 */
+	Route::get("/utility", "UtilityController@index");
+	Route::get('/utility/links', "UtilityController@generateLinks");
 });

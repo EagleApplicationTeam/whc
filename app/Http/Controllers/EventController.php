@@ -21,7 +21,7 @@ class EventController extends Controller
      */
     public function clientIndex() {
         // Get all events
-        $events = \App\Event::where('live', true)->get();
+        $events = Event::where('live', true)->get();
 
         // Return them in the response
         return response()->json($events->load(['location']));
@@ -29,10 +29,18 @@ class EventController extends Controller
 
     public function adminIndex() {
          // Get all events
-        $events = \App\Event::get();
+        $events = Event::get();
 
         // Return them in the response
         return response()->json($events->load(['location']));
+    }
+
+    public function getEvent(Event $event) {
+        if (!$event) {
+            return back();
+        }
+
+        return redirect('/')->with('event', $event);
     }
 
 	/*
