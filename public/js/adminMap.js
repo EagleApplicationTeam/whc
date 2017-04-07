@@ -261,7 +261,7 @@ function tryGeo(id) {
 			// Get map
 			var map = marker.getMap();
 			// Get address value
-			var address = $(".address[data-id='" + marker.id + "'").val();
+			var address = $(".address[data-id='" + id + "'").val();
 
 			// Instantiate geocoder
 			var geocoder = new google.maps.Geocoder();
@@ -272,18 +272,18 @@ function tryGeo(id) {
 					// Get postition
 					var position = results[0].geometry.location;
 
-					// Set map center to geolocated position
-					map.setCenter(position);
-
 					// Set position of marker
 					marker.setPosition(position);
 
-					// Reset all marker infowindows and reopen specified infowindow
-					for (var i = markers.length - 1; i >= 0; i--) {
-						markers[i].infoWindow.close()
+					// Set map center to geolocated position
+					map.setCenter(position);
 
-						if (markers[i].id === id) {
-							markers[i].infoWindow.open(map, marker);
+					// Reset all marker infowindows and reopen specified infowindow
+					for (var j = markers.length - 1; j >= 0; j--) {
+						markers[j].infoWindow.close()
+
+						if (markers[j].id === id) {
+							markers[j].infoWindow.open(map, marker);
 						}
 					}
 
