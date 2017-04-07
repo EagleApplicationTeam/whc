@@ -31,76 +31,95 @@ function getEvents(map) {
 	// AJAX request to server
 	axios.get("/map/events").then((response) => {
 		// Add the markers to the map
-		addMarkers(response.data, map);
+		for (var i = response.data.length - 1; i >= 0; i--) {
+			console.log(response.data[i]);
+			addMarker(map,response.data[i], null);
+		}
 	}).catch((error) => {
-		// Show error message
+		// Show error message]
+		console.log(error);
 		showErrorMessage("There was a problem retrieving the events.");
 	});
 }
 
 /*
- * Adds the events to the map
+ * Function for adding a marker to the map
  */
-function addMarkers(events, map) {
-	// Loop through the events
-	for (var i = events.length - 1; i >= 0; i--) {
+function addMarker(map, event, position) {
+	// If the position parameter is not null
+	if (position != null) {
 		// Create the marker and set the marker position
 		var marker = new google.maps.Marker({
-			position: {lat: events[i].location.lat, lng: events[i].location.lng},
+			position: position,
 			map: map,
 			draggable: true
 		});
-
-		// Set the id of the marker
-		marker.id = events[i].id;
-		marker.name = events[i].name;
-		marker.body = events[i].body;
-		marker.address = events[i].address;
-		marker.link = events[i].link
-		marker.live = events[i].live
-
-		// Create info window structure
-		var form = $("#form").clone();
-
-		// Setup the form ids and actions
-		form.find("form").attr("data-id",marker.id);
-		form.find("#save").attr("onclick", "saveInfo("+marker.id+")");
-		form.find("#delete").attr("onclick", "deleteEvent("+marker.id+")");
-
-		// Set input values
-		form.find("#name").attr("value",marker.name);
-		form.find("#body").text(marker.body);
-		form.find("#address").attr("value", marker.address);
-		form.find("#link").attr("value", marker.link);
-
-		if (marker.live !== 1) {
-			form.find("#live").removeAttr("checked");
-		}
-
-		form.find("#directions").attr("id", "directions"+marker.id);
-		form.find("#directions"+marker.id).attr("onclick", "redirectToDirections(" + marker.id + ")");
-
-		// Create the data window
-		var infoWindow = new google.maps.InfoWindow({
-			content: form.html()
-		});
-
-		marker.infoWindow = infoWindow;
-
-		// Attach a event listener to the marker so that the info window opens when clicked
-		google.maps.event.addListener(marker, 'click', function() {
-			// Open info window
-        	this.infoWindow.open(map, this);
-      	});
-
-		// Call the position update method when drag ends
-      	google.maps.event.addListener(marker, 'dragend', function() {
-      		updatePosition(this.id, this.getPosition());
-      	});
-
-      	// Push the marker onto the array of markers
-      	markers.push(marker);
 	}
+
+	// Create the marker and set the marker position
+	var marker = new google.maps.Marker({
+		position: {lat: event.location.lat, lng: event.location.lng},
+		map: map,
+		draggable: true
+	});
+
+	// Set the id of the marker
+	marker.id = event.id;
+	marker.name = event.name;
+	marker.body = event.body;
+	marker.address = event.address;
+	marker.link = event.link
+	marker.live = event.live
+
+	// Create info window structure
+	var form = $("#form").clone();
+
+	// Setup the form ids and actions
+	form.find("form").attr("data-id",marker.id);
+	form.find("#save").attr("onclick", "saveInfo("+marker.id+")");
+	form.find("#delete").attr("onclick", "deleteEvent("+marker.id+")");
+	form.find("#address").attr("onblur", "tryGeo("+marker.id+")");
+	form.find("#address").attr("data-id", marker.id);
+	form.find("#address").on('keyup', function(e) {
+		if (e.keyCode == 13) {
+			console.log("some shit");
+		}
+	});
+
+	// Set input values
+	form.find("#name").attr("value",marker.name);
+	form.find("#body").text(marker.body);
+	form.find("#address").attr("value", marker.address);
+	form.find("#link").attr("value", marker.link);
+
+	// Make sure the checkbox is in the right state
+	if (marker.live !== 1) {
+		form.find("#live").removeAttr("checked");
+	}
+	
+	form.find("#directions").attr("id", "directions"+marker.id);
+	form.find("#directions"+marker.id).attr("onclick", "redirectToDirections(" + marker.id + ")");
+
+	// Create the data window
+	var infoWindow = new google.maps.InfoWindow({
+		content: form.html()
+	});
+
+	marker.infoWindow = infoWindow;
+
+	// Attach a event listener to the marker so that the info window opens when clicked
+	google.maps.event.addListener(marker, 'click', function() {
+		// Open info window
+    	this.infoWindow.open(map, this);
+  	});
+
+	// Call the position update method when drag ends
+  	google.maps.event.addListener(marker, 'dragend', function() {
+  		updatePosition(this.id, this.getPosition());
+  	});
+
+  	// Push the marker onto the array of markers
+  	markers.push(marker);
 }
 
 /*
@@ -121,66 +140,6 @@ function updatePosition(id, position) {
 }
 
 /*
- * Function for adding a new marker
- */
-function addNewMarker(position, map, response) {
-	// Create marker
-	var marker = new google.maps.Marker({
-		position: position,
-		map: map,
-		draggable: true
-	});
-
-	// Create info window
-	var infoWindow = new google.maps.InfoWindow({
-		content: response.data.name
-	});
-
-	// Add marker property data
-	marker.id = response.data.id
-	marker.name = response.data.name
-	marker.body = response.data.body
-	marker.address = response.data.address
-	marker.link = response.data.link
-
-	// Create info window structure
-	var form = $("#form").clone();
-
-	// Setup the form ids and actions
-	form.find("form").attr("data-id",marker.id);
-	form.find("#save").attr("onclick", "saveInfo("+marker.id+")");
-	form.find("#delete").attr("onclick", "deleteEvent("+marker.id+")");
-
-	// Set input values
-	form.find("#name").attr("value",marker.name);
-	form.find("#body").text(marker.body);
-	form.find("#address").attr("value", marker.address);
-	form.find("#link").attr("value", marker.link);
-
-	// Create the data window
-	var infoWindow = new google.maps.InfoWindow({
-		content: form.html()
-	});
-
-	marker.infoWindow = infoWindow;
-
-	// Add click event
-	google.maps.event.addListener(marker, 'click', function() {
-		// Open info window
-    	this.infoWindow.open(map, this);  	
-  	});
-
-	// Add drag end event
-  	google.maps.event.addListener(marker, 'dragend', function() {
-  		// Update the position of the event
-    	updatePosition(response.data.id, marker.getPosition());
-  	});
-
-  	// Push onto the markers array
-  	markers.push(marker);
-}
-
-/*
  * Add new event to map
  */
 function addEvent(map) {
@@ -193,7 +152,7 @@ function addEvent(map) {
 		lng: center.lng()
 	}).then((response) => {
 		// Add the event data to a new marker
-		addNewMarker(center, map, response);
+		addMarker(map, response.data, center);
 	}).catch((error) => {
 		// Show error message
 		showErrorMessage("An error occurred while trying to add a new marker.");
@@ -271,7 +230,7 @@ function deleteEvent(id) {
 						markers[i].setMap(null);
 					}
 				}
-			}, 2000);
+			}, 1500);
 		}).catch((error) => {
 			// Return to normal state
 			deleteButton.text("Delete").toggleClass("disabled");
@@ -291,5 +250,48 @@ function showErrorMessage(message) {
 		var html = '<div class="alert alert-danger" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><span class="glyphicon glyphicon-exclamation-sign"></span><strong> Whoops!</strong><span> ' + message + '</span></div>';
 		// Present the alert
 		$("#messageContainer").html(html);
+	}
+}
+
+/*
+ * Geocode address of marker
+ */
+function tryGeo(id) {
+	// Loop through local markers
+	for (var i = markers.length - 1; i >= 0; i--) {
+		var marker = markers[i];
+		// If marker is found
+		if (marker.id === id) {
+			// Get map
+			var map = marker.getMap();
+			// Get address value
+			var address = $(".address[data-id='" + marker.id + "'").val();
+
+			// Instantiate geocoder
+			var geocoder = new google.maps.Geocoder();
+
+			// Try to geocode address
+			geocoder.geocode({'address' : address}, function(results, status) {
+				if (status === "OK") {
+					// Get postition
+					var position = results[0].geometry.location;
+
+					// Set map center to geolocated position
+					map.setCenter(position);
+
+					// Set position of marker
+					marker.setPosition(position);
+
+					// Reset infowindow
+					marker.infoWindow.close();
+					marker.infoWindow.open(map, marker);
+
+					// Send API request to update location
+					updatePosition(marker.id, position);
+				} else {
+					alert("Unable to locate address.");
+				}
+			})
+		}
 	}
 }

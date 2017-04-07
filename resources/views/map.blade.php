@@ -33,7 +33,7 @@
             background-color: #fff; 
             z-index: 5; 
             border-radius: 5px; 
-            padding: 5px;
+            padding-top: 5px;
             margin-top: 11px;
         }
 
@@ -44,23 +44,47 @@
             border: none; 
             outline: none;
             margin-bottom: 2px;
-            overflow-x: hidden;
         }
 
-        .searchItem {
-            min-width: 50vw; 
-            min-height: 20px; 
-            background-color: #fff; 
-            padding: 10px;
-            -webkit-transform: translateX(-5px);
-            transform: translateX(-5px);
-        }
+        .pac-card {
+            margin: 10px 10px 0 0;
+            border-radius: 2px 0 0 2px;
+            box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            outline: none;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+            background-color: #fff;
+            font-family: Roboto;
+          }
 
-        .searchItem:hover {
-            background-color: #3097D1;
-            color: #fff;
-            cursor: pointer;
-        }
+          #pac-container {
+            padding-bottom: 12px;
+            margin-right: 0px;
+          }
+
+          .pac-controls {
+            display: inline-block;
+            padding: 5px 11px;
+          }
+
+          .pac-controls label {
+            font-family: Roboto;
+            font-size: 13px;
+            font-weight: 300;
+          }
+
+          #pac-input {
+            background-color: #fff;
+            font-family: Roboto;
+            font-size: 15px;
+            font-weight: 300;
+            margin-left: 12px;
+            padding: 0 0 0 0;
+            text-overflow: ellipsis;
+            width: 95%;
+            border: none;
+            outline: none;
+          }
     </style>
     <!-- Bootstrap styles -->
     <link rel="stylesheet" href="/css/app.css">
@@ -85,7 +109,7 @@
         <div id="app">
             <!-- Search Bar -->
             <div class="searchBarContainer">
-                <input id="search" type="text" class="searchBarInput" placeholder="Search" autocomplete="off">
+                <input id="pac-input" type="text" placeholder="Search" autocomplete="off">
                 <div class="results">
                     
                 </div>
@@ -98,7 +122,7 @@
 		<!-- Map logic script -->
 		<script src="/js/map.js"></script>
 		<!-- Google Maps API script -->
-		<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBope1OFljyrx9BHNeaC9YJ3Oxx76i6XFY&callback=initMap"></script>
+		<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBope1OFljyrx9BHNeaC9YJ3Oxx76i6XFY&callback=initMap&libraries=places"></script>
         <script>
           (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
           (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

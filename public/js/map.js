@@ -14,16 +14,88 @@ function initMap() {
    	// Get the events from the database
     getEvents(map);
 
-    // Attach query function to search input
-    $("#search").on("input",function() {
-    	// Remove the search items DOM
-    	$(".searchItem").remove();
-    	// Get query string
-    	var query = $("#search").val();
-    	// If query string is greater than 0, perform the search
-    	if (query.length != 0) {
-    		queryEvents(query, map);
-    	}
+    /*
+     * Search Bar Initialization
+     */
+    // Create the search box and link it to the UI element.
+    var input = document.getElementById('pac-input');
+    var searchBox = new google.maps.places.SearchBox(input);
+
+    // Bias the SearchBox results towards current map's viewport.
+    map.addListener('bounds_changed', function() {
+      searchBox.setBounds(map.getBounds());
+    });
+
+    var searchMarkers = [];
+    // Listen for the event fired when the user selects a prediction and retrieve
+    // more details for that place.
+    searchBox.addListener('places_changed', function() {
+      	var places = searchBox.getPlaces();
+
+      	console.log(places);
+
+      	if (places.length == 0) {
+        	return;
+      	}
+
+      	// Clear out the old markers.
+      	searchMarkers.forEach(function(marker) {
+        	marker.setMap(null);
+      	});
+
+      	searchMarkers = [];
+
+	    // For each place, get the icon, name and location.
+	    var bounds = new google.maps.LatLngBounds();
+	    places.forEach(function(place) {
+	        if (!place.geometry) {
+	          	console.log("Returned place contains no geometry");
+	          	return;
+	        }
+	        var icon = {
+	          url: place.icon,
+	          	size: new google.maps.Size(71, 71),
+	          	origin: new google.maps.Point(0, 0),
+	          	anchor: new google.maps.Point(17, 34),
+	          	scaledSize: new google.maps.Size(25, 25)
+	        };
+
+	        // Create a marker for each place.
+	        var marker = new google.maps.Marker({
+	          	map: map,
+	          	// icon: icon,
+	          	title: place.name,
+	          	position: place.geometry.location
+	        });
+
+	        var infoWindow = new google.maps.InfoWindow({
+	        	content: marker.title
+	        });
+
+	        infoWindow.open(map, marker);
+	        
+	        searchMarkers.push(marker);
+
+	        if (place.geometry.viewport) {
+	          	// Only geocodes have viewport.
+	          	bounds.union(place.geometry.viewport);
+	        } else {
+	          	bounds.extend(place.geometry.location);
+	        }
+      	});
+
+	    // Find custom markers
+		for (var i = markers.length - 1; i >= 0; i--) {
+			var name = markers[i].name;
+			var lname = name.toLowerCase();
+			var query = places.toLowerCase();
+			// If event name contains query substring
+			if (lname.includes(query)) {
+				searchMarkers.push(markers[i]);
+			}
+		}
+
+      	map.fitBounds(bounds);
     });
 }
 
@@ -88,30 +160,6 @@ function addMarkers(events, map) {
 		// Push marker onto markers array
       	markers.push(marker);
 	}
-}
-
-/*
- * Perform search on events
- */
-function queryEvents(query, map) {
-	// Loop through markers array
-	for (var i = markers.length - 1; i >= 0; i--) {
-		var name = markers[i].name;
-		var lname = name.toLowerCase();
-		query = query.toLowerCase();
-		// If event name contains query substring
-		if (lname.includes(query)) {
-			// Append event to results element
- 			$(".results").append("<div class='searchItem' data-id='" + markers[i].id + "'><strong>" + name + "</strong></div>");
-		}
-	}
-
-	// Attach click event to search item
-	$(".searchItem").click(function() {
-		var id = $(this).data("id");
-		// Move map center to event
-		searchItemSelected(id, map);
-	});
 }
 
 /*
