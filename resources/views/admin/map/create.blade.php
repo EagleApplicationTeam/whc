@@ -18,16 +18,26 @@
 					<label for="address">Address</label>
 					<input type="text" name="address" id="address" class="form-control address">
 				</div>
-				<div>
+				<div class="form-group">
 					<label for="link">Link</label>
 					<input type="text" name="link" id="link" class="form-control">
 					<p class="help-block">Make sure there is a http:// or https:// in the link.</p>
 				</div>
-				<div class="checkbox">
-					<label>
-						<input type="checkbox" id="live" checked> Live
-					</label>
+				<div class="form-group">
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" id="live" checked> Live
+						</label>
+					</div>
 					<p class="help-block">Check this to make the location visible to the public.</p>
+				</div>
+				<div class="form-group">
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" id="priority" checked> Priority
+						</label>
+					</div>
+					<p class="help-block">Check this to make the location a priority for the way location labels are rendered. Note: making multiple locations a priority near each other may result in unwanted placement of the labels.</p>
 				</div>
 				<div id="save" class="saveButton btn btn-success">Save</div>
 				<div id="delete" class="btn btn-danger pull-right" data-toggle="modal" data-target="#myModal">Delete</div>

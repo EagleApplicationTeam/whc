@@ -21,12 +21,6 @@ function initMap() {
     var input = document.getElementById('pac-input');
     var searchBox = new google.maps.places.SearchBox(input);
 
-    // $("#pac-input").keypress(function(e) {
-    // 	if (e.which === 13) {
-    // 		alert("return");
-    // 	}
-    // });
-
     // Bias the SearchBox results towards current map's viewport.
     map.addListener('bounds_changed', function() {
       searchBox.setBounds(map.getBounds());
@@ -141,6 +135,7 @@ function addMarkers(events, map) {
 		marker.body = events[i].body
 		marker.address = events[i].address
 		marker.link = events[i].link
+		marker.priority = events[i].priority;
 
 		// Build the form out
 		var form = $("#infoWindow").clone();
@@ -166,7 +161,7 @@ function addMarkers(events, map) {
         	this.infoWindow.open(map, this);
       	});
 
-		// Create label for marker with marker's name
+      	// Create label for marker with marker's name
 		var markerLabel = new google.maps.InfoWindow({
 			closeBoxURL: "",
 			content: marker.name
@@ -174,13 +169,16 @@ function addMarkers(events, map) {
 
 		marker.label = markerLabel;
 
-		// Open the label
-		marker.label.open(map, marker);
-
 		// Attach event listener to the infowindow so that when it is closed, the label reopens
       	google.maps.event.addListener(infoWindow, 'closeclick', function() {
       		marker.label.open(map, marker);
       	});
+
+
+      	if (marker.priority) {
+			// Open the label
+			marker.label.open(map, marker);
+      	}
 
 		// Push marker onto markers array
       	markers.push(marker);
@@ -194,6 +192,23 @@ function addMarkers(events, map) {
 	if(typeof goToLocation === "function") {
 		goToLocation(map);
 	}
+
+	google.maps.event.addListener(map, 'zoom_changed', function() {
+		// If zoom level is 16, open the non priority markers
+    	if (this.getZoom() === 16) {
+    		for (var i = markers.length - 1; i >= 0; i--) {
+	    		if (!markers[i].priority) {
+	    			markers[i].label.open(this, markers[i]);
+	    		}
+	    	}
+    	} else if(this.getZoom() < 16) {
+    		for (var i = markers.length - 1; i >= 0; i--) {
+    			if (!markers[i].priority) {
+    				markers[i].label.close();
+    			}
+    		}
+    	}
+    });
 }
 
 /*

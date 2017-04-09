@@ -65,6 +65,7 @@ class EventController extends Controller
         $event->address = "1234 Something Street";
     	$event->link = "http://example.com";
         $event->live = true;
+        $event->priority = false;
 
     	// Create a new location
     	$location = new Location;
@@ -103,6 +104,7 @@ class EventController extends Controller
         $event->address = $request->address;
         $event->link = $request->link;
         $event->live = $request->live;
+        $event->priority = $request->priority;
 
         // Save out the event
     	$event->save();

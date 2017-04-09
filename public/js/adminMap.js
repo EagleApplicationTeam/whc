@@ -69,6 +69,7 @@ function addMarker(map, event, position) {
 	marker.address = event.address;
 	marker.link = event.link
 	marker.live = event.live
+	marker.priority = event.priority;
 
 	// Create info window structure
 	var form = $("#form").clone();
@@ -89,6 +90,10 @@ function addMarker(map, event, position) {
 	// Make sure the checkbox is in the right state
 	if (marker.live !== 1) {
 		form.find("#live").removeAttr("checked");
+	}
+
+	if (marker.priority !== 1) {
+		form.find("#priority").removeAttr("checked");
 	}
 
 	form.find("#directions").attr("id", "directions"+marker.id);
@@ -171,10 +176,14 @@ function saveInfo(id) {
 	var address = form.find("#address").val();
 	var link = form.find("#link").val();
 
-	var checked = false
+	var checked = false, priority = false;
 
 	if (form.find("#live").is(":checked")) {
 		checked = true;
+	}
+
+	if (form.find("#priority").is(":checked")) {
+		priority = true;
 	}
 
 	if (name != "") {
@@ -188,7 +197,8 @@ function saveInfo(id) {
 			body: body,
 			address: address,
 			link: link,
-			live: checked
+			live: checked,
+			priority: priority
 		}).then((response) => {
 			// Toggle loaded state and reset after 2 seconds 
 			saveButton.text("Saved!");
