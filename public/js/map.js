@@ -207,50 +207,22 @@ function addMarkers(events, map) {
 	}
 
 	google.maps.event.addListener(map, 'zoom_changed', function() {
-		console.log(map.getZoom());
-		console.log(map.getCenter().lat());
-		var position = map.getCenter();
+		var zoom = this.getZoom();
 		// If zoom level is 16, open the non priority markers
-    	if (this.getZoom() === 16) {
+    	if (zoom === 16) {
     		for (var i = markers.length - 1; i >= 0; i--) {
 	    		if (!markers[i].priority) {
 	    			markers[i].label.open(map, markers[i]);
 	    		}
 	    	}
-    	} else if(this.getZoom() < 16) {
+    	} else if (zoom < 16) {
     		for (var i = markers.length - 1; i >= 0; i--) {
     			if (!markers[i].priority) {
     				markers[i].label.close();
     			}
     		}
     	}
-    	map.setCenter(position);
-    	console.log(map.getZoom());
-		console.log(map.getCenter().lat());
     });
-}
-
-/*
- * Moves the map center to event location
- */
-function searchItemSelected(id,map) {
-	// Loop through events
-	for (var i = markers.length - 1; i >= 0; i--) {
-		var marker = markers[i];
-		if (id === marker.id) {
-			// Pan to marker
-     		map.panTo(marker.getPosition());
-
-     		// Reset search bar
-     		$(".searchItem").remove();
-     		$("#search").val("");
-
-     		// Open marker info window
-     		marker.infoWindow.open(map, marker);
-
-     		break;
-		}
-	}
 }
 
 /*
