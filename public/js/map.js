@@ -226,7 +226,7 @@ function addMarkers(events, map) {
     	}
     	map.setCenter(position);
     	console.log(map.getZoom());
-		console.log(map.getPosition());
+		console.log(map.getCenter());
     });
 }
 
