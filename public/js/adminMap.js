@@ -31,8 +31,7 @@ function getEvents(map) {
 	// AJAX request to server
 	axios.get("/map/events").then((response) => {
 		// Add the markers to the map
-		for (var i = response.data.length - 1; i >= 0; i--) {
-			console.log(response.data[i]);
+		for (var i = response.data.length - 1; i >= 0; i--) { 
 			addMarker(map,response.data[i], null);
 		}
 	}).catch((error) => {
@@ -104,6 +103,12 @@ function addMarker(map, event, position) {
 
 	// Attach a event listener to the marker so that the info window opens when clicked
 	google.maps.event.addListener(marker, 'click', function() {
+		// Close other infowindows
+		for (var i = markers.length - 1; i >= 0; i--) {
+			if (markers[i].id !== this.id) {
+				markers[i].infoWindow.close();
+			}
+		}
 		// Open info window
     	this.infoWindow.open(map, this);
   	});
@@ -224,6 +229,7 @@ function deleteEvent(id) {
 					// Marker id matches specified id, remove the marker
 					if (markers[i].id === id) {
 						markers[i].setMap(null);
+						break;
 					}
 				}
 			}, 1500);
@@ -292,7 +298,9 @@ function tryGeo(id) {
 				} else {
 					showErrorMessage("Unable to locate address.");
 				}
-			})
+			});
+
+			break;
 		}
 	}
 }

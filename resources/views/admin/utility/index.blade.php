@@ -31,9 +31,14 @@
 					<label for="address">Address</label>
 					<input id="address" type="text" class="form-control" style="max-width: 70%;">
 				</div>
-				<p><strong id="result" class="hidden"></strong></p>
-				<button id="addressButton" href="/utility/generate" class="btn btn-primary">Generate Link</button>
-				<p class="help-block">Input the address of a location and get a link that will take the user to the location on the map when they visit the link.</p>
+				<div class="form-group">
+					<p><strong id="result" class="hidden"></strong></p>
+				</div>
+				
+				<div class="form-group">
+					<button id="addressButton" href="/utility/generate" class="btn btn-primary">Generate Link</button>
+					<p class="help-block">Input the address of a location and get a link that will take the user to the location on the map when they visit the link.</p>
+				</div>
 			</div>
 		</div>
 	</div>

@@ -85,6 +85,8 @@
             border: none;
             outline: none;
           }
+
+        /*  .gm-style-iw + div {display: none;}*/
     </style>
     <!-- Bootstrap styles -->
     <link rel="stylesheet" href="/css/app.css">
@@ -151,13 +153,13 @@
                 var lng = {{ session('location')['lng'] }};
 
                 // Make new marker
-                // var marker = new google.maps.Marker({
-                //     map: map,
-                //     position: {
-                //         lat: lat,
-                //         lng: lng
-                //     }
-                // });
+                var marker = new google.maps.Marker({
+                    map: map,
+                    position: {
+                        lat: lat,
+                        lng: lng
+                    }
+                });
 
                 // Set map center
                 map.setCenter({
@@ -166,7 +168,7 @@
                 });
 
                 // Set map zoom
-                map.setZoom(16);
+                map.setZoom(17);
             }
         </script>
         @endif

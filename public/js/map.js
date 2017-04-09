@@ -21,6 +21,12 @@ function initMap() {
     var input = document.getElementById('pac-input');
     var searchBox = new google.maps.places.SearchBox(input);
 
+    // $("#pac-input").keypress(function(e) {
+    // 	if (e.which === 13) {
+    // 		alert("return");
+    // 	}
+    // });
+
     // Bias the SearchBox results towards current map's viewport.
     map.addListener('bounds_changed', function() {
       searchBox.setBounds(map.getBounds());
@@ -28,16 +34,7 @@ function initMap() {
 
     var searchMarkers = [];
 
-    // Find custom markers
-	for (var i = markers.length - 1; i >= 0; i--) {
-		var name = markers[i].name;
-		var lname = name.toLowerCase();
-		var query = places.toLowerCase();
-		// If event name contains query substring
-		if (lname.includes(query)) {
-			searchMarkers.push(markers[i]);
-		}
-	}
+    var geocoder = new google.maps.Geocoder;
 
     // Listen for the event fired when the user selects a prediction and retrieve
     // more details for that place.
@@ -58,33 +55,44 @@ function initMap() {
 	    // For each place, get the icon, name and location.
 	    var bounds = new google.maps.LatLngBounds();
 	    places.forEach(function(place) {
+	    	// If the place does not contain a location
 	        if (!place.geometry) {
 	          	console.log("Returned place contains no geometry");
 	          	return;
 	        }
-	        var icon = {
-	          url: place.icon,
-	          	size: new google.maps.Size(71, 71),
-	          	origin: new google.maps.Point(0, 0),
-	          	anchor: new google.maps.Point(17, 34),
-	          	scaledSize: new google.maps.Size(25, 25)
-	        };
 
-	        // Create a marker for each place.
+	        // Create a marker for the place.
 	        var marker = new google.maps.Marker({
 	          	map: map,
-	          	// icon: icon,
 	          	title: place.name,
 	          	position: place.geometry.location
 	        });
 
-	        var infoWindow = new google.maps.InfoWindow({
-	        	content: marker.title
+	        // Instantiate InfoWindow object
+	        var infoWindow = new google.maps.InfoWindow();
+
+	        var placeId = place.place_id;
+
+	        // Get the place information from the place ID
+	        geocoder.geocode({'placeId' : placeId}, function(results, status) {
+	        	if (status !== "OK") {
+	        		alert("Error");
+	        		return;
+	        	}
+
+	        	map.setZoom(17);
+	        	map.setCenter(results[0].geometry.location);
+
+	        	marker.setPlace({
+	        		placeId: placeId,
+	        		location: results[0].geometry.location
+	        	});
+
+	        	marker.setVisible(true);
+
+	        	infoWindow.setContent(results[0].formatted_address);
+	        	infoWindow.open(map, marker);
 	        });
-
-	        // map.setZoom(3);
-
-	        infoWindow.open(map, marker);
 	        
 	        searchMarkers.push(marker);
 
@@ -124,7 +132,7 @@ function addMarkers(events, map) {
 		// Create the marker and set the marker position
 		var marker = new google.maps.Marker({
 			position: {lat: events[i].location.lat, lng: events[i].location.lng},
-			map: map
+			map: map,
 		});
 
 		// Set marker properties
@@ -146,16 +154,32 @@ function addMarkers(events, map) {
 		form.find("#directions"+marker.id).attr("onclick", "redirectToDirections(" + marker.id + ")");
 
 		// Create the data window
-		var infoWindow = new google.maps.InfoWindow({
-			content: form.html()
-		});
+		var infoWindow = new google.maps.InfoWindow();
+		infoWindow.setContent(form.html());
 
 		marker.infoWindow = infoWindow;
 
 		// Attach a event listener to the marker so that the info window opens when clicked
 		google.maps.event.addListener(marker, 'click', function() {
+			this.label.close();
 			// Open the info window
         	this.infoWindow.open(map, this);
+      	});
+
+		// Create label for marker with marker's name
+		var markerLabel = new google.maps.InfoWindow({
+			closeBoxURL: "",
+			content: marker.name
+		});
+
+		marker.label = markerLabel;
+
+		// Open the label
+		marker.label.open(map, marker);
+
+		// Attach event listener to the infowindow so that when it is closed, the label reopens
+      	google.maps.event.addListener(infoWindow, 'closeclick', function() {
+      		marker.label.open(map, marker);
       	});
 
 		// Push marker onto markers array
