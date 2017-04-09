@@ -207,6 +207,7 @@ function addMarkers(events, map) {
 	}
 
 	google.maps.event.addListener(map, 'zoom_changed', function() {
+		console.log(this.getZoom());
 		// If zoom level is 16, open the non priority markers
     	if (this.getZoom() === 16) {
     		for (var i = markers.length - 1; i >= 0; i--) {
