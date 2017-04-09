@@ -25,7 +25,7 @@
 					</table>
 				@endif
 				<a href="/utility/links" class="btn btn-primary">Generate Location Links</a>
-				<p class="help-block">Clicking this button will generate a list of links for locations. When one of these links is visited, the user will be taken straight to the location on the map. This only workds for added locations for the moment.</p>
+				<p class="help-block">This will generate a list of links for the locations in the WHC Map database. When one of these links is visited, the user will be taken straight to the location on the map and shown the details for that location.</p>
 				<hr>
 				<div class="form-group">
 					<label for="address">Address</label>
