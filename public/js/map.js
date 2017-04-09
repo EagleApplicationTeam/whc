@@ -167,6 +167,7 @@ function addMarkers(events, map) {
 
 			// Open the info window
         	this.infoWindow.open(map, this);
+        	this.infoWindow.setZIndex(1000);
 
         	// Close marker label
         	this.label.close();
@@ -174,15 +175,16 @@ function addMarkers(events, map) {
 
       	// Create label for marker with marker's name
 		var markerLabel = new google.maps.InfoWindow({
-			closeBoxURL: "",
 			content: marker.name
 		});
 
 		marker.label = markerLabel;
 
 		// Attach event listener to the infowindow so that when it is closed, the label reopens
-      	google.maps.event.addListener(infoWindow, 'closeclick', function() {
-      		marker.label.open(map, marker);
+      	google.maps.event.addListener(marker.infoWindow, 'closeclick', function() {
+      		for (var i = markers.length - 1; i >= 0; i--) {
+      			markers[i].label.open(map, markers[i]);
+      		}
       	});
 
 
