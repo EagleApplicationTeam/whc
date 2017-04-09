@@ -208,13 +208,13 @@ function addMarkers(events, map) {
 
 	google.maps.event.addListener(map, 'zoom_changed', function() {
 		console.log(map.getZoom());
-		console.log(map.getCenter());
+		console.log(map.getCenter().lat());
 		var position = map.getCenter();
 		// If zoom level is 16, open the non priority markers
     	if (this.getZoom() === 16) {
     		for (var i = markers.length - 1; i >= 0; i--) {
 	    		if (!markers[i].priority) {
-	    			markers[i].label.open(this, markers[i]);
+	    			// markers[i].label.open(this, markers[i]);
 	    		}
 	    	}
     	} else if(this.getZoom() < 16) {
@@ -226,7 +226,7 @@ function addMarkers(events, map) {
     	}
     	map.setCenter(position);
     	console.log(map.getZoom());
-		console.log(map.getCenter());
+		console.log(map.getCenter().lat());
     });
 }
 
