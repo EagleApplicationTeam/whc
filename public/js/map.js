@@ -214,7 +214,7 @@ function addMarkers(events, map) {
     	if (this.getZoom() === 16) {
     		for (var i = markers.length - 1; i >= 0; i--) {
 	    		if (!markers[i].priority) {
-	    			// markers[i].label.open(this, markers[i]);
+	    			markers[i].label.open(map, markers[i]);
 	    		}
 	    	}
     	} else if(this.getZoom() < 16) {
