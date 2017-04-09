@@ -156,9 +156,20 @@ function addMarkers(events, map) {
 
 		// Attach a event listener to the marker so that the info window opens when clicked
 		google.maps.event.addListener(marker, 'click', function() {
-			this.label.close();
+			var tM = this;
+			// Loop through markers and close other info windows
+			for (var i = markers.length - 1; i >= 0; i--) {
+				if (markers[i].id != tM.id) {
+					markers[i].infoWindow.close();
+					markers[i].label.open(map, markers[i]);
+				}
+			}
+
 			// Open the info window
         	this.infoWindow.open(map, this);
+
+        	// Close marker label
+        	this.label.close();
       	});
 
       	// Create label for marker with marker's name
