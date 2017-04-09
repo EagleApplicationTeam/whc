@@ -131,6 +131,7 @@
                     // Loop through the markers and find right one
                     for (var i = markersArray.length - 1; i >= 0; i--) {
                         var marker = markersArray[i];
+                        marker.label.open(map, marker);
                         if (marker.id == id) {
                             // Set the position of the map on the marker
                             map.setCenter(marker.getPosition());
@@ -139,6 +140,9 @@
 
                             // Open the info window
                             marker.infoWindow.open(map, marker);
+
+                            // Close marker label
+                            marker.label.close();
                         }
                     }
                 }
