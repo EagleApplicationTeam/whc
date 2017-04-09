@@ -175,7 +175,8 @@ function addMarkers(events, map) {
 
       	// Create label for marker with marker's name
 		var markerLabel = new google.maps.InfoWindow({
-			content: marker.name
+			content: marker.name,
+			disableAutoPan: true
 		});
 
 		marker.label = markerLabel;
@@ -216,9 +217,9 @@ function addMarkers(events, map) {
 	    		}
 	    	}
     	} else if (zoom < 16) {
-    		for (var i = markers.length - 1; i >= 0; i--) {
-    			if (!markers[i].priority) {
-    				markers[i].label.close();
+    		for (var j = markers.length - 1; j >= 0; j--) {
+    			if (!markers[j].priority) {
+    				markers[j].label.close();
     			}
     		}
     	}
