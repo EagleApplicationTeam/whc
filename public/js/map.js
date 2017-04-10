@@ -55,38 +55,32 @@ function initMap() {
 	          	return;
 	        }
 
+	        console.log(place);
+
 	        // Create a marker for the place.
 	        var marker = new google.maps.Marker({
 	          	map: map,
-	          	title: place.name,
-	          	position: place.geometry.location
+	          	place: {
+	          		placeId: place.id,
+	          		location: place.geometry.location
+	          	}   	
 	        });
+
+	        map.setZoom(18);
+			map.setCenter(place.geometry.location);
 
 	        // Instantiate InfoWindow object
 	        var infoWindow = new google.maps.InfoWindow();
 
-	        var placeId = place.place_id;
+	        var content = "<p>" + place.name + "<p>";
+	        if (place.opening_hours.open_now) {
+	        	content += "<strong>Open</strong>"
+	        } else {
+	        	content += "<strong>Closed</strong>"
+	        }
 
-	        // Get the place information from the place ID
-	        geocoder.geocode({'placeId' : placeId}, function(results, status) {
-	        	if (status !== "OK") {
-	        		alert("Error");
-	        		return;
-	        	}
-
-	        	map.setZoom(17);
-	        	map.setCenter(results[0].geometry.location);
-
-	        	marker.setPlace({
-	        		placeId: placeId,
-	        		location: results[0].geometry.location
-	        	});
-
-	        	marker.setVisible(true);
-
-	        	infoWindow.setContent(results[0].formatted_address);
-	        	infoWindow.open(map, marker);
-	        });
+	        infoWindow.setContent(content);
+	        infoWindow.open(map, marker);
 	        
 	        searchMarkers.push(marker);
 

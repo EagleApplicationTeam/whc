@@ -209,7 +209,7 @@ function saveInfo(id) {
 		}).catch((error) => {
 			// Show error message
 			showErrorMessage("There was a problem updating the event information.");
-
+			console.log(error);
 			// Return button to normal state
 			saveButton.toggleClass("disabled").text("Save");
 		});
