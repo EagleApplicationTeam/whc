@@ -62,7 +62,7 @@ class EventController extends Controller
     	$event = new Event;
     	$event->name = "New Event";
     	$event->body = "A description of the event.";
-        $event->address = "1234 Something Street";
+        $event->address = "";
     	$event->link = "http://example.com";
         $event->live = true;
         $event->priority = false;

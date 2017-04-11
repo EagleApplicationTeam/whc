@@ -66,7 +66,7 @@ function addMarker(map, event, position) {
 	marker.id = event.id;
 	marker.name = event.name;
 	marker.body = event.body;
-	marker.address = event.address;
+	marker.address = "";
 	marker.link = event.link
 	marker.live = event.live
 	marker.priority = event.priority;
@@ -283,14 +283,16 @@ function tryGeo(id) {
 			// Get map
 			var map = marker.getMap();
 
-			var address;
 			// Get address value
+			var address;
+			// Loop through markers and get address
 			for (var i = markers.length - 1; i >= 0; i--) {
 				if (markers[i].id === id) {
 					address = markers[i].address;
 				}
 			}
 
+			// Check if address is null
 			if (address === null) {
 				alert("address null");
 				return;
