@@ -202,7 +202,13 @@ function saveInfo(id) {
 		}).then((response) => {
 			// Toggle loaded state and reset after 2 seconds 
 			saveButton.text("Saved!");
-			tryGeo(id);
+
+			for (var i = markers.length - 1; i >= 0; i--) {
+				if (markers[i].id === id) {
+					markers.address = address;
+					tryGeo(id);
+				}
+			}
 			setTimeout(function() {
 				saveButton.toggleClass("disabled").text("Save");
 			}, 2000);
@@ -276,8 +282,19 @@ function tryGeo(id) {
 		if (marker.id === id) {
 			// Get map
 			var map = marker.getMap();
+
+			var address;
 			// Get address value
-			var address = $(".address[data-id='" + id + "'").val();
+			for (var i = markers.length - 1; i >= 0; i--) {
+				if (markers[i].id === id) {
+					address = markers[i].address;
+				}
+			}
+
+			if (address === null) {
+				alert("address null");
+				return;
+			}
 
 			// Instantiate geocoder
 			var geocoder = new google.maps.Geocoder();
