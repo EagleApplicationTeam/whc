@@ -202,13 +202,13 @@ function saveInfo(id) {
 		}).then((response) => {
 			// Toggle loaded state and reset after 2 seconds 
 			saveButton.text("Saved!");
-
-			for (var i = markers.length - 1; i >= 0; i--) {
-				if (markers[i].id === id) {
-					markers.address = address;
-					tryGeo(id);
-				}
-			}
+			tryGeo(id, address);
+			// for (var i = markers.length - 1; i >= 0; i--) {
+			// 	if (markers[i].id === id) {
+			// 		markers.address = address;
+					
+			// 	}
+			// }
 			setTimeout(function() {
 				saveButton.toggleClass("disabled").text("Save");
 			}, 2000);
@@ -274,7 +274,7 @@ function showErrorMessage(message) {
 /*
  * Geocode address of marker
  */
-function tryGeo(id) {
+function tryGeo(id, address) {
 	// Loop through local markers
 	for (var i = markers.length - 1; i >= 0; i--) {
 		var marker = markers[i];
@@ -283,17 +283,9 @@ function tryGeo(id) {
 			// Get map
 			var map = marker.getMap();
 
-			// Get address value
-			var address;
-			// Loop through markers and get address
-			for (var i = markers.length - 1; i >= 0; i--) {
-				if (markers[i].id === id) {
-					address = markers[i].address;
-				}
-			}
-
 			// Check if address is null
-			if (address === null || address === "") {
+			if (address === null || address == "") {
+				alert("null");
 				return;
 			}
 
