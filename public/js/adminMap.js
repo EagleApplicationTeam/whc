@@ -293,8 +293,7 @@ function tryGeo(id) {
 			}
 
 			// Check if address is null
-			if (address === null) {
-				alert("address null");
+			if (address === null || address === "") {
 				return;
 			}
 
