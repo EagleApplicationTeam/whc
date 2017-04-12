@@ -17,7 +17,7 @@ class EventController extends Controller
     }
 
     /*
-     * Returns all events
+     * Returns all events that are live
      */
     public function clientIndex() {
         // Get all events
@@ -27,6 +27,9 @@ class EventController extends Controller
         return response()->json($events->load(['location']));
     }
 
+    /*
+     * Returns all events to the admin page
+     */
     public function adminIndex() {
          // Get all events
         $events = Event::get();
@@ -36,6 +39,7 @@ class EventController extends Controller
     }
 
     public function getEvent(Event $event) {
+        // If event could not be found, redirect back
         if (!$event) {
             return back();
         }
@@ -49,8 +53,6 @@ class EventController extends Controller
             'lng' => $request->lng
         ];
 
-        // dd($data);
-
         return redirect('/')->with(['location' => $data]);
     }
 
@@ -58,7 +60,7 @@ class EventController extends Controller
 	 * Create a new event
 	 */
     public function store(Request $request) {
-    	// Create a new event
+    	// Create a new event object
     	$event = new Event;
     	$event->name = "New Event";
     	$event->body = "A description of the event.";
@@ -67,7 +69,7 @@ class EventController extends Controller
         $event->live = true;
         $event->priority = false;
 
-    	// Create a new location
+    	// Create a new location object
     	$location = new Location;
     	$location->lat = $request->lat;
     	$location->lng = $request->lng;
@@ -85,14 +87,6 @@ class EventController extends Controller
      * Update an event's data
      */
     public function updateEvent(Request $request, Event $event) {
-        // Validate request
-        // $this->validate($request, [
-        //     'name' => 'max:50',
-        //     'body' => 'max:255',
-        //     'address' => 'max:50',
-        //     'link' => 'active_url'
-        // ]);
-
         // Check if event exists
     	if (!$event) {
     		return response(null, 404);

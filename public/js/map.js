@@ -28,6 +28,7 @@ function initMap() {
 
     var searchMarkers = [];
 
+    // Instantiate new geocoder
     var geocoder = new google.maps.Geocoder;
 
     // Listen for the event fired when the user selects a prediction and retrieve
@@ -35,6 +36,7 @@ function initMap() {
     searchBox.addListener('places_changed', function() {
       	var places = searchBox.getPlaces();
 
+      	// If places returns no results
       	if (places.length == 0) {
         	return;
       	}
@@ -66,6 +68,7 @@ function initMap() {
 	          	}   	
 	        });
 
+	        // Setup the map zoom and position
 	        map.setZoom(18);
 			map.setCenter(place.geometry.location);
 
@@ -79,9 +82,11 @@ function initMap() {
 	        	content += "<strong>Closed</strong>"
 	        }
 
+	        // Set the content of the info window and open it
 	        infoWindow.setContent(content);
 	        infoWindow.open(map, marker);
 	        
+	        // Push onto the search markers array
 	        searchMarkers.push(marker);
 
 	        if (place.geometry.viewport) {
@@ -107,7 +112,7 @@ function getEvents(map) {
 	}).catch((error) => {
 		// Log the error
 		console.log(error)
-		alert("There was a problem.");
+		alert("There was a problem retrieving the locations.");
 	});
 }
 
@@ -155,7 +160,9 @@ function addMarkers(events, map) {
 			for (var i = markers.length - 1; i >= 0; i--) {
 				if (markers[i].id != tM.id) {
 					markers[i].infoWindow.close();
-					markers[i].label.open(map, markers[i]);
+					if (markers[i].priority) {
+						markers[i].label.open(map, markers[i]);
+					}
 				}
 			}
 
@@ -173,6 +180,7 @@ function addMarkers(events, map) {
 			disableAutoPan: true
 		});
 
+		// Set the label attribute to the marker label object
 		marker.label = markerLabel;
 
 		// Attach event listener to the infowindow so that when it is closed, the label reopens
@@ -182,7 +190,7 @@ function addMarkers(events, map) {
       		}
       	});
 
-
+      	// If the marker is a priority
       	if (marker.priority) {
 			// Open the label
 			marker.label.open(map, marker);
@@ -197,6 +205,7 @@ function addMarkers(events, map) {
 		goToEvent(markers,map);
 	}
 
+	// If location is specified on page load
 	if(typeof goToLocation === "function") {
 		goToLocation(map);
 	}
@@ -210,6 +219,7 @@ function addMarkers(events, map) {
 	    			markers[i].label.open(map, markers[i]);
 	    		}
 	    	}
+	    // If zoom level is less than 16, close non-priority labels
     	} else if (zoom < 16) {
     		for (var j = markers.length - 1; j >= 0; j--) {
     			if (!markers[j].priority) {
@@ -227,9 +237,10 @@ function redirectToDirections(id) {
 	// Toggle Loading state
 	$("#directions"+id).text("Please wait...").toggleClass("disabled");
 
-	// Find marker
+	// Find specified marker
 	var des;
 	for (var i = markers.length - 1; i >= 0; i--) {
+		// If marker id matches supplied id
 		if (markers[i].id === id) {
 			des = markers[i].getPosition()
 			break;
@@ -245,13 +256,14 @@ function redirectToDirections(id) {
 				$("#directions"+id).html("Directions <span class='glyphicon glyphicon-log-out'></span>").toggleClass("disabled");
 				window.location = url;
 			}
-		// Show error message
 		}, function() {
+			// Show error message
 			alert("Geolocation is disabled. Try enabling location services for the browser and try again.");
 			$("#directions"+id).html("Directions <span class='glyphicon glyphicon-log-out'></span>").toggleClass("disabled");
 			window.location = url;
 		});
 	} else {
+		// Show error message
 		alert("Geolocation is not supported by this browser.");
 		$("#directions"+id).html("Directions <span class='glyphicon glyphicon-log-out'></span>").toggleClass("disabled");
 		window.location = url;

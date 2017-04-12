@@ -14,7 +14,7 @@ function initMap() {
 	// Get events
 	getEvents(map);
 
-	// Add click event to button
+	// Add click event to add marker button
 	$("#addEvent").click(function() {
 		// Attach the addEvent function to the button
 		addEvent(map);
@@ -35,7 +35,7 @@ function getEvents(map) {
 			addMarker(map,response.data[i], null);
 		}
 	}).catch((error) => {
-		// Show error message]
+		// Show error message
 		console.log(error);
 		showErrorMessage("There was a problem retrieving the events.");
 	});
@@ -62,7 +62,7 @@ function addMarker(map, event, position) {
 		draggable: true
 	});
 
-	// Set the id of the marker
+	// Set the attributes of the marker
 	marker.id = event.id;
 	marker.name = event.name;
 	marker.body = event.body;
@@ -78,42 +78,45 @@ function addMarker(map, event, position) {
 	form.find("form").attr("data-id",marker.id);
 	form.find("#save").attr("onclick", "saveInfo("+marker.id+")");
 	form.find("#delete").attr("onclick", "deleteEvent("+marker.id+")");
-	// form.find("#address").attr("onblur", "tryGeo("+marker.id+")");
 	form.find("#address").attr("data-id", marker.id);
 
-	// Set input values
+	// Set the form input values
 	form.find("#name").attr("value",marker.name);
 	form.find("#body").text(marker.body);
 	form.find("#address").attr("value", marker.address);
 	form.find("#link").attr("value", marker.link);
 
-	// Make sure the checkbox is in the right state
+	// Make sure the live checkbox is in the right state
 	if (marker.live !== 1) {
 		form.find("#live").removeAttr("checked");
 	}
 
+	// Make sure the priority checkbox is in the right state
 	if (marker.priority !== 1) {
 		form.find("#priority").removeAttr("checked");
 	}
 
+	// Setup the directions button's attributes
 	form.find("#directions").attr("id", "directions"+marker.id);
 	form.find("#directions"+marker.id).attr("onclick", "redirectToDirections(" + marker.id + ")");
 
-	// Create the data window
+	// Create the info window and set the content equal to the form
 	var infoWindow = new google.maps.InfoWindow({
 		content: form.html()
 	});
 
+	// Assign the info window property to the newly created info window
 	marker.infoWindow = infoWindow;
 
 	// Attach a event listener to the marker so that the info window opens when clicked
 	google.maps.event.addListener(marker, 'click', function() {
-		// Close other infowindows
+		// Close other info windows
 		for (var i = markers.length - 1; i >= 0; i--) {
 			if (markers[i].id !== this.id) {
 				markers[i].infoWindow.close();
 			}
 		}
+
 		// Open info window
     	this.infoWindow.open(map, this);
   	});
@@ -123,7 +126,7 @@ function addMarker(map, event, position) {
   		updatePosition(this.id, this.getPosition());
   	});
 
-  	// Push the marker onto the array of markers
+  	// Push the marker onto the global array of markers
   	markers.push(marker);
 }
 
@@ -148,7 +151,7 @@ function updatePosition(id, position) {
  * Add new event to map
  */
 function addEvent(map) {
-	// Get center
+	// Get map center
 	var center = map.getCenter();
 
 	// Attempt request to create new event
@@ -156,7 +159,7 @@ function addEvent(map) {
 		lat: center.lat(),
 		lng: center.lng()
 	}).then((response) => {
-		// Add the event data to a new marker
+		// Add the location data to a new marker
 		addMarker(map, response.data, center);
 	}).catch((error) => {
 		// Show error message
@@ -165,17 +168,19 @@ function addEvent(map) {
 }
 
 /*
- * Save event info
+ * Save location info
  */
 function saveInfo(id) {
-	// Get DOM of marker info window
+	// Get DOM of marker info window with ID
 	var form = $("form[data-id='" + id + "']");
 
+	// Get all values from form fields
 	var name = form.find("#name").val();
 	var body = form.find("#body").val();
 	var address = form.find("#address").val();
 	var link = form.find("#link").val();
 
+	// Get values from check boxes
 	var checked = false, priority = false;
 
 	if (form.find("#live").is(":checked")) {
@@ -186,12 +191,13 @@ function saveInfo(id) {
 		priority = true;
 	}
 
+	// Make sure the name is not empty
 	if (name != "") {
 		// Setup save button loading state
 		var saveButton = form.find("#save");
 		saveButton.text("Saving...").toggleClass("disabled");
 
-		// Attempt request to update the event's info
+		// Attempt request to update the location's info
 		axios.patch("/event/"+id, {
 			name: name,
 			body: body,
@@ -200,15 +206,11 @@ function saveInfo(id) {
 			live: checked,
 			priority: priority
 		}).then((response) => {
-			// Toggle loaded state and reset after 2 seconds 
+			// Toggle loaded state
 			saveButton.text("Saved!");
+			// Attempt to geolocate the position of the location from the address
 			tryGeo(id, address);
-			// for (var i = markers.length - 1; i >= 0; i--) {
-			// 	if (markers[i].id === id) {
-			// 		markers.address = address;
-					
-			// 	}
-			// }
+			// Return to normal state after 2 seconds
 			setTimeout(function() {
 				saveButton.toggleClass("disabled").text("Save");
 			}, 2000);
@@ -223,14 +225,14 @@ function saveInfo(id) {
 }
 
 /*
- * Delete an event
+ * Delete a location
  */
 function deleteEvent(id) {
 	if (id != null) {
 		// Get the event form DOM
 		var form = $("form[data-id='" + id + "']");
 
-		// Toggle loading state
+		// Toggle loading state of button
 		var deleteButton = form.find("#delete");
 		deleteButton.text("Deleting...").toggleClass("disabled");
 
@@ -285,7 +287,7 @@ function tryGeo(id, address) {
 
 			// Check if address is null
 			if (address === null || address == "") {
-				alert("null");
+				alert("Could not geocode address");
 				return;
 			}
 
