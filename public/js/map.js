@@ -186,7 +186,9 @@ function addMarkers(events, map) {
 		// Attach event listener to the infowindow so that when it is closed, the label reopens
       	google.maps.event.addListener(marker.infoWindow, 'closeclick', function() {
       		for (var i = markers.length - 1; i >= 0; i--) {
-      			markers[i].label.open(map, markers[i]);
+      			if (markers[i].priority) {
+      				markers[i].label.open(map, markers[i]);
+      			}
       		}
       	});
 
