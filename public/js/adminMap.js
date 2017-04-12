@@ -66,7 +66,7 @@ function addMarker(map, event, position) {
 	marker.id = event.id;
 	marker.name = event.name;
 	marker.body = event.body;
-	marker.address = "";
+	marker.address = event.address;
 	marker.link = event.link
 	marker.live = event.live
 	marker.priority = event.priority;
