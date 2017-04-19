@@ -152,7 +152,7 @@ function addMarkers(events, map) {
 		infoWindow.setContent(form.html());
 
 		marker.infoWindow = infoWindow;
-		marker.infoWindow.id = events[i].id;
+		marker.infoWindow.id = marker.id;
 
 		// Attach a event listener to the marker so that the info window opens when clicked
 		google.maps.event.addListener(marker, 'click', function() {
@@ -187,7 +187,11 @@ function addMarkers(events, map) {
 		// Attach event listener to the infowindow so that when it is closed, the label reopens
       	google.maps.event.addListener(marker.infoWindow, 'closeclick', function() {
       		for (var i = markers.length - 1; i >= 0; i--) {
-      			markers[i].label.open(map, markers[i])
+      			if (map.getZoom() >= 16 && !markers[i].priority) {
+       				markers[i].label.open(map, markers[i])
+      			} else if (map.getZoom() < 16 && markers[i].priority) {
+      				markers[i].label.open(map, markers[i])
+      			}
       		}
       	});
 
