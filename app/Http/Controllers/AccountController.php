@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use Hash;
 use Illuminate\Http\Request;
 
+/*
+ * This controller is reponsible for updating
+ * the user's password.
+ */
 class AccountController extends Controller
 {
 	/*

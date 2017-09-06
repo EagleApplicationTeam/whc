@@ -5,6 +5,9 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
+/*
+ * Base User model that ships with Laravel.
+ */
 class User extends Authenticatable
 {
     use Notifiable;

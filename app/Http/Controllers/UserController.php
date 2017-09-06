@@ -5,6 +5,11 @@ namespace App\Http\Controllers;
 use App\User;
 use Illuminate\Http\Request;
 
+/*
+ * This controller is responsible for user permission control.
+ * This controller handles the logic for verifying users, revoking
+ * privleges, and removing unwanted users from the application.
+ */
 class UserController extends Controller
 {
 	/*

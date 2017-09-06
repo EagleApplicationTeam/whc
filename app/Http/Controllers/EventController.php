@@ -7,6 +7,12 @@ use App\Location;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
+/*
+ * This controller handles the logic of storing,
+ * updating, and deleting map markers. This controller
+ * is also responsible for supplying the frontend of 
+ * the application with marker data.
+ */
 class EventController extends Controller
 {
     /*
@@ -38,6 +44,9 @@ class EventController extends Controller
         return response()->json($events->load(['location']));
     }
 
+    /*
+     * Get event from request
+     */
     public function getEvent(Event $event) {
         // If event could not be found, redirect back
         if (!$event) {
@@ -47,6 +56,9 @@ class EventController extends Controller
         return redirect('/')->with('event', $event);
     }
 
+    /*
+     * Get location from request
+     */
     public function getLocation(Request $request) {
         $data = [
             'lat' => $request->lat,

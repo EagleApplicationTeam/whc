@@ -5,6 +5,12 @@ namespace App\Http\Controllers;
 use App\Event;
 use Illuminate\Http\Request;
 
+/*
+ * This controller is responsible for displaying
+ * the utility page of the application backend. This
+ * controller is also responsible for generating the
+ * links for each marker in the application database.
+ */
 class UtilityController extends Controller
 {
 	/*

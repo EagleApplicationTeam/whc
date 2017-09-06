@@ -7,7 +7,10 @@ use Closure;
 class VerifiedMiddleware
 {
     /**
-     * Handle an incoming request.
+     * Handle an incoming authorization request and
+     * check to see if the authorized user is verified
+     * by the super user. If not, logout and display a
+     * message.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next
@@ -24,6 +27,7 @@ class VerifiedMiddleware
             return redirect('/login')->with('unauth', "You're account has not been verfied yet by the site administrator.");
         }
 
+        // If the user is verified, continue with the request.
         return $next($request);
     }
 }
