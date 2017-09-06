@@ -32,7 +32,7 @@ function getEvents(map) {
 	axios.get("/map/events").then((response) => {
 		// Add the markers to the map
 		for (var i = response.data.length - 1; i >= 0; i--) { 
-			addMarker(map,response.data[i], null);
+			addMarker(map,response.data[i], null, 0);
 		}
 	}).catch((error) => {
 		// Show error message
@@ -44,7 +44,7 @@ function getEvents(map) {
 /*
  * Function for adding a marker to the map
  */
-function addMarker(map, event, position) {
+function addMarker(map, event, position, shouldOpen) {
 	// If the position parameter is not null
 	if (position != null) {
 		// Create the marker and set the marker position
@@ -128,6 +128,10 @@ function addMarker(map, event, position) {
 
   	// Push the marker onto the global array of markers
   	markers.push(marker);
+
+  	if (shouldOpen) {
+  		marker.infoWindow.open(map, marker);
+  	}
 }
 
 /*
@@ -160,7 +164,13 @@ function addEvent(map) {
 		lng: center.lng()
 	}).then((response) => {
 		// Add the location data to a new marker
-		addMarker(map, response.data, center);
+		addMarker(map, response.data, center, 1);
+
+		// Show success feedback
+		$("#addEvent").removeClass("btn-primary").addClass("btn-success disabled").html("<span class='glyphicon glyphicon-ok'></span> Added!");
+		setTimeout(function() {
+			$("#addEvent").addClass("btn-primary").removeClass("btn-success disabled").html("<span class='glyphicon glyphicon-plus'></span> Add Marker");
+		}, 2000);
 	}).catch((error) => {
 		// Show error message
 		showErrorMessage("An error occurred while trying to add a new marker.");
@@ -274,6 +284,23 @@ function showErrorMessage(message) {
 }
 
 /*
+ * Show success message
+ */
+function showSuccessMessage(message) {
+	// Setup html elements with message
+	if (message != null || message != '') {
+		var html = '<div class="alert alert-success" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><span class="glyphicon glyphicon-ok"></span><strong> Success!</strong><span> ' + message + '</span></div>';
+		// Present the alert
+		$("#messageContainer").html(html);
+
+		// Hide message after 3 seconds
+		setTimeout(function() {
+			$("#messageContainer").html("");
+		}, 3000);
+	}
+}
+
+/*
  * Geocode address of marker
  */
 function tryGeo(id, address) {
@@ -287,7 +314,7 @@ function tryGeo(id, address) {
 
 			// Check if address is null
 			if (address === null || address == "") {
-				alert("Could not geocode address");
+				alert("Could not geocode address. Marker position will still be saved.");
 				return;
 			}
 
