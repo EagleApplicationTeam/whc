@@ -144,6 +144,10 @@ function addMarkers(events, map) {
 		form.find("#address").text(marker.address);
 		form.find("#link").attr("href", marker.link);
 
+		if (marker.link != "" || marker.link != null) {
+			form.find("#link").hide();
+		}
+
 		form.find(".directions").attr("id", "directions"+marker.id);
 		form.find("#directions"+marker.id).attr("onclick", "redirectToDirections(" + marker.id + ")");
 
