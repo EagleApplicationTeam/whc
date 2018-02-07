@@ -104,7 +104,7 @@ class EventController extends Controller
     		return response(null, 404);
     	}
 
-        // Updat event information
+        // Update event information
     	$event->name = $request->name;
         $event->body = $request->body;
         $event->address = $request->address;
